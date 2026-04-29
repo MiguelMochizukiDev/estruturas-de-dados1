@@ -101,6 +101,15 @@ char *q = (char *)p;
 * `const` - somente leitura
 * `volatile` - impede otimizações
 
+### Onde as variáveis são declaradas
+
+As variáveis têm **escopo**, isto é, só podem ser referenciadas em regiões específicas, e **duração**, ou seja, podem ser usadas até serem liberadas da memória. Nesse sentido, variáveis podem ser:
+
+- Locais (ou automáticas): só existem e podem ser usadas no bloco (entre as chaves) onde são declaradas
+- Parâmetros formais: comportam-se como variáveis locais na definição de uma função qualquer
+- Variáveis globais: são reconhecidas pelo programa inteiro e persistem até o fim do programa
+- Variáveis estáticas: só são reconhecidas no seu escopo, qualquer que seja (bloco ou arquivo), mas persistem até o fim do programa.
+
 ### Construção de novos tipos
 
 A partir dos tipos primitivos:
