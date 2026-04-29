@@ -6,7 +6,7 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c11 -O0 -Iinclude
 LDFLAGS =
-LDLIBS =
+LDLIBS = -lm
 
 # Diretórios
 BUILD_DIR = build
