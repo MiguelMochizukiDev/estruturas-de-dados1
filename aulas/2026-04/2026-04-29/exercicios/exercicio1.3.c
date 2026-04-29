@@ -10,7 +10,47 @@
  */
 #include <stdio.h>
 
-#define MAX_N 46
+#define STATUS_OK 0 /* Status code for OK in main */
+#define STATUS_ERROR 1 /* Status code for error in main */
+
+/* ==============================
+ * Funcoes
+ * ============================== */
+
+int fibonacci(int n);
+
+/* ==============================
+ * Main
+ * ============================== */
+
+/**
+ * Testa codigo em alguns casos de uso
+ */
+int main(void) {
+	/* Numero a ser testado */
+	int n;
+
+	n = 1; /* Fibonacci(1) = 1 */
+	if (fibonacci(n) != 1) return STATUS_ERROR;
+
+	n = 2; /* Fibonacci(2) = 1 */
+	if (fibonacci(n) != 1) return STATUS_ERROR;
+
+	n = 3; /* Fibonacci(3) = 2 */
+	if (fibonacci(n) != 2) return STATUS_ERROR;
+
+	n = 10; /* Fibonacci(10) = 55 */
+	if (fibonacci(n) != 55) return STATUS_ERROR;
+
+	n = 40; /* Fibonacci(40) = 102334155 */
+	if (fibonacci(n) != 102334155) return STATUS_ERROR;
+
+	return STATUS_OK;
+}
+
+/* ==============================
+ * Implementacoes
+ * ============================== */
 
 /**
  * Retorna o n-esimo termo da sequencia de Fibonacci.
@@ -22,42 +62,19 @@
  * O n-esimo termo da sequencia de Fibonacci.
  */
 int fibonacci(int n) {
+	/* F(n - 1), F(n - 2), F(n) respectivamente */
+	int fib_n_minus_1, fib_n_minus_2, fib_n;
+
 	if (n <= 0) return 0;
 	if (n == 1 || n == 2) return 1;
 
-	int fib_n_minus_2 = 1, fib_n_minus_1 = 1;
-	int fib_n = 0;
+	fib_n_minus_2 = 1;
+	fib_n_minus_1 = 1;
+
 	for (int i = 3; i <= n; i++) {
 		fib_n = fib_n_minus_1 + fib_n_minus_2;
 		fib_n_minus_2 = fib_n_minus_1;
 		fib_n_minus_1 = fib_n;
 	}
 	return fib_n;
-}
-
-int main(void) {
-	int n;
-	int fib_n;
-
-	/* Alguns casos de teste */
-	n = 1; /* Fibonacci(1) = 1 */
-	fib_n = fibonacci(n);
-	printf("CASO 1: %s\n", (fib_n == 1) ? "CERTO" : "ERRO");
-
-	n = 2; /* Fibonacci(2) = 1 */
-	fib_n = fibonacci(n);
-	printf("CASO 2: %s\n", (fib_n == 1) ? "CERTO" : "ERRO");
-
-	n = 3; /* Fibonacci(3) = 2 */
-	fib_n = fibonacci(n);
-	printf("CASO 3: %s\n", (fib_n == 2) ? "CERTO" : "ERRO");
-
-	n = 10; /* Fibonacci(10) = 55 */
-	fib_n = fibonacci(n);
-	printf("CASO 4: %s\n", (fib_n == 55) ? "CERTO" : "ERRO");
-
-	n = MAX_N; /* Fibonacci(MAX_N) = 1836311903 */
-	fib_n = fibonacci(n);
-	printf("CASO 5: %s\n", (fib_n == 1836311903) ? "CERTO" : "ERRO");
-	return 0;
 }

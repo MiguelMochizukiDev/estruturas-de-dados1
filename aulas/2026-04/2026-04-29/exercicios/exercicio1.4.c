@@ -8,6 +8,48 @@
  */
 #include <stdio.h>
 
+#define STATUS_OK 0 /* Status code for OK in main */
+#define STATUS_ERROR 1 /* Status code for error in main */
+
+/* ==============================
+ * Funcoes
+ * ============================== */
+
+int soma_impares(int);
+
+/* ==============================
+ * Main
+ * ============================== */
+
+/**
+ * Testa codigo em alguns casos de uso
+ */
+int main(void) {
+	/* Numero a ser testado */
+	int n;
+
+	n = 1; /* Soma dos 1 primeiros impares = 1 */
+	if (soma_impares(n) != 1) return STATUS_ERROR;
+
+	n = 2; /* Soma dos 2 primeiros impares = 1 + 3 = 4 */
+	if (soma_impares(n) != 4) return STATUS_ERROR;
+
+	n = 3; /* Soma dos 3 primeiros impares = 1 + 3 + 5 = 9 */
+	if (soma_impares(n) != 9) return STATUS_ERROR;
+
+	n = 5; /* Soma dos 5 primeiros impares = 1 + 3 + 5 + 7 + 9 = 25 */
+	if (soma_impares(n) != 25) return STATUS_ERROR;
+
+	n = 50; /* Soma dos 50 primeiros impares = 1 + 3 + ... + 99 = 2500 */
+	if (soma_impares(n) != 2500) return STATUS_ERROR;
+
+	return STATUS_OK;
+}
+
+/* ==============================
+ * Implementacoes
+ * ============================== */
+
 /**
  * Retorna a soma dos n primeiros numeros naturais impares.
  *
@@ -19,32 +61,4 @@
  */
 int soma_impares(int n) {
 	return n * n;
-}
-
-int main(void) {
-	int n;
-	int soma;
-
-	/* Alguns casos de teste */
-	n = 1; /* Soma dos 1 primeiros impares = 1 */
-	soma = soma_impares(n);
-	printf("CASO 1: %s\n", (soma == 1) ? "CERTO" : "ERRO");
-
-	n = 2; /* Soma dos 2 primeiros impares = 1 + 3 = 4 */
-	soma = soma_impares(n);
-	printf("CASO 2: %s\n", (soma == 4) ? "CERTO" : "ERRO");
-
-	n = 3; /* Soma dos 3 primeiros impares = 1 + 3 + 5 = 9 */
-	soma = soma_impares(n);
-	printf("CASO 3: %s\n", (soma == 9) ? "CERTO" : "ERRO");
-
-	n = 5; /* Soma dos 5 primeiros impares = 1 + 3 + 5 + 7 + 9 = 25 */
-	soma = soma_impares(n);
-	printf("CASO 4: %s\n", (soma == 25) ? "CERTO" : "ERRO");
-
-	n = 50; /* Soma dos 50 primeiros impares = 1 + 3 + ... + 99 = 2500 */
-	soma = soma_impares(n);
-	printf("CASO 5: %s\n", (soma == 2500) ? "CERTO" : "ERRO");
-
-	return 0;
 }

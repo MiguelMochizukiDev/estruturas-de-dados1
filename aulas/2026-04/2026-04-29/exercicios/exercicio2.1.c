@@ -12,8 +12,50 @@
 #include <stdio.h>
 #include <math.h>
 
+#define STATUS_OK 0 /* Status code for OK in main */
+#define STATUS_ERROR 1 /* Status code for error in main */
+
 #define EPSILON 1e-5 /* Constante para comparar numeros de ponto flutuante, considerando uma margem de erro pequena */
 #define EQUAL(a, b) ( ((a) - (b)) < EPSILON && ((b) - (a)) < EPSILON ) /* Macro para comparar numeros de ponto flutuante, considerando uma margem de erro pequena */
+
+/* ==============================
+ * Funcoes
+ * ============================== */
+
+int raizes(float a, float b, float c, float *x1, float *x2);
+
+/* ==============================
+ * Main
+ * ============================== */
+
+/**
+ * Testa codigo em alguns casos de uso
+ */
+int main(void) {
+	/* Variaveis para armazenar os coeficientes e as raizes */
+	float a, b, c;
+
+	/* Variaveis para armazenar as raizes */
+	float x1, x2;
+
+	a = 1; b = -3; c = 2; /* Raizes: 1 e 2 */
+	if (raizes(a, b, c, &x1, &x2) != 2 || !EQUAL(x1, 2.0) || !EQUAL(x2, 1.0)) return STATUS_ERROR;
+
+	a = 1; b = -2; c = 1; /* Raiz unica: 1 */
+	if (raizes(a, b, c, &x1, &x2) != 1 || !EQUAL(x1, 1.0) || !EQUAL(x2, 1.0)) return STATUS_ERROR;
+
+	a = 1; b = 0; c = 1; /* Sem raizes reais */
+	if (raizes(a, b, c, &x1, &x2) != 0) return STATUS_ERROR;
+
+	a = 0; b = 2; c = 1; /* Nao e equacao do segundo grau */
+	if (raizes(a, b, c, &x1, &x2) != -1) return STATUS_ERROR;
+
+	return STATUS_OK;
+}
+
+/* ==============================
+ * Implementacoes
+ * ============================== */
 
 /**
  * Calcula as raizes de uma equacao do segundo grau, do tipo ax^2 + bx + c = 0.
@@ -41,29 +83,4 @@ int raizes(float a, float b, float c, float *x1, float *x2) {
 	*x1 = (-b + sqrt(delta)) / (2 * a);
 	*x2 = (-b - sqrt(delta)) / (2 * a);
 	return 2;
-}
-
-int main(void) {
-	int a, b, c;
-	float x1, x2;
-	int num_raizes;
-
-	/* Alguns casos de teste */
-	a = 1; b = -3; c = 2; /* Raizes: 1 e 2 */
-	num_raizes = raizes(a, b, c, &x1, &x2);
-	printf("CASO 1: %s\n", (num_raizes == 2 && EQUAL(x1, 2.0) && EQUAL(x2, 1.0)) ? "CERTO" : "ERRO");
-
-	a = 1; b = -2; c = 1; /* Raiz unica: 1 */
-	num_raizes = raizes(a, b, c, &x1, &x2);
-	printf("CASO 2: %s\n", (num_raizes == 1 && EQUAL(x1, 1.0) && EQUAL(x2, 1.0)) ? "CERTO" : "ERRO");
-
-	a = 1; b = 0; c = 1; /* Sem raizes reais */
-	num_raizes = raizes(a, b, c, &x1, &x2);
-	printf("CASO 3: %s\n", (num_raizes == 0) ? "CERTO" : "ERRO");
-
-	a = 0; b = 2; c = 1; /* Nao e equacao do segundo grau */
-	num_raizes = raizes(a, b, c, &x1, &x2);
-	printf("CASO 4: %s\n", (num_raizes == -1) ? "CERTO" : "ERRO");
-
-	return 0;
 }

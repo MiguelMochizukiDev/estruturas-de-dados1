@@ -9,6 +9,69 @@
  */
 #include <stdio.h>
 
+#define STATUS_OK 0 /* Status code for OK in main */
+#define STATUS_ERROR 1 /* Status code for error in main */
+
+/* ==============================
+ * Funcoes
+ * ============================== */
+
+int primo(int);
+
+/* ==============================
+ * Main
+ * ============================== */
+
+/**
+ * Testa codigo em alguns casos de uso
+ */
+int main(void) {
+	/* Numero a ser testado */
+	int n;
+
+	n = 0; /* Nao primo */
+	if (primo(n)) return STATUS_ERROR;
+
+	n = -5; /* Primo: o sinal negativo nao influencia na primalidade */
+	if (!primo(n)) return STATUS_ERROR;
+
+	n = 1; /* Nao primo: por definicao, o numero 1 nao e primo */
+	if (primo(n)) return STATUS_ERROR;
+
+	n = 2; /* Primo: o menor numero primo */
+	if (!primo(n)) return STATUS_ERROR;
+
+	n = 3; /* Primo */
+	if (!primo(n)) return STATUS_ERROR;
+
+	n = 4; /* Nao primo: divisivel por 2 */
+	if (primo(n)) return STATUS_ERROR;
+
+	n = 5; /* Primo */
+	if (!primo(n)) return STATUS_ERROR;
+
+	n = 6; /* Nao primo: divisivel por 2 e por 3 */
+	if (primo(n)) return STATUS_ERROR;
+
+	n = 7; /* Primo */
+	if (!primo(n)) return STATUS_ERROR;
+
+	n = 8; /* Nao primo: divisivel por 2 */
+	if (primo(n)) return STATUS_ERROR;
+
+	n = 9; /* Nao primo: divisivel por 3 */
+	if (primo(n)) return STATUS_ERROR;
+
+	n = 10; /* Nao primo: divisivel por 2 e por 5 */
+	if (primo(n)) return STATUS_ERROR;
+
+	return STATUS_OK;
+}
+
+/* ==============================
+ * Implementacoes
+ * ============================== */
+
 /**
  * Decide se o numero n e primo ou nao.
  *
@@ -32,60 +95,4 @@ int primo(int n) {
 		if (n % i == 0 || n % (i + 2) == 0) return 0; /* i = 6k+5, i + 2 = 6k+1 para algum k */
 	}
 	return 1;
-}
-
-int main(void) {
-	int n;
-	int is_primo;
-
-	/* Alguns casos de teste */
-	n = 0; /* Nao primo */
-	is_primo = primo(n);
-	printf("CASO 1: %s\n", (is_primo == 0) ? "CERTO" : "ERRO");
-
-	n = -5; /* Primo: o sinal negativo nao influencia na primalidade */
-	is_primo = primo(n);
-	printf("CASO 2: %s\n", (is_primo == 1) ? "CERTO" : "ERRO");
-
-	n = 1; /* Nao primo: por definicao, o numero 1 nao e primo */
-	is_primo = primo(n);
-	printf("CASO 3: %s\n", (is_primo == 0) ? "CERTO" : "ERRO");
-
-	n = 2; /* Primo: o menor numero primo */
-	is_primo = primo(n);
-	printf("CASO 4: %s\n", (is_primo == 1) ? "CERTO" : "ERRO");
-
-	n = 3; /* Primo */
-	is_primo = primo(n);
-	printf("CASO 5: %s\n", (is_primo == 1) ? "CERTO" : "ERRO");
-
-	n = 4; /* Nao primo: divisivel por 2 */
-	is_primo = primo(n);
-	printf("CASO 6: %s\n", (is_primo == 0) ? "CERTO" : "ERRO");
-
-	n = 5; /* Primo */
-	is_primo = primo(n);
-	printf("CASO 7: %s\n", (is_primo == 1) ? "CERTO" : "ERRO");
-
-	n = 6; /* Nao primo: divisivel por 2 e por 3 */
-	is_primo = primo(n);
-	printf("CASO 8: %s\n", (is_primo == 0) ? "CERTO" : "ERRO");
-
-	n = 7; /* Primo */
-	is_primo = primo(n);
-	printf("CASO 9: %s\n", (is_primo == 1) ? "CERTO" : "ERRO");
-
-	n = 8; /* Nao primo: divisivel por 2 */
-	is_primo = primo(n);
-	printf("CASO 10: %s\n", (is_primo == 0) ? "CERTO" : "ERRO");
-
-	n = 9; /* Nao primo: divisivel por 3 */
-	is_primo = primo(n);
-	printf("CASO 11: %s\n", (is_primo == 0) ? "CERTO" : "ERRO");
-
-	n = 10; /* Nao primo: divisivel por 2 e por 5 */
-	is_primo = primo(n);
-	printf("CASO 12: %s\n", (is_primo == 0) ? "CERTO" : "ERRO");
-
-	return 0;
 }
