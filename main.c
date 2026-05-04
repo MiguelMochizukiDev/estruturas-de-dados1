@@ -7,6 +7,7 @@
  */
 #include <stdio.h>
 #include "ponto.h"
+#include "circulo.h"
 
 #define STATUS_OK 0 /* Status de sucesso */
 #define STATUS_ERR 1 /* Status de erro */
@@ -75,6 +76,76 @@ int testar_ponto(void) {
 	return STATUS_OK;
 }
 
+/**
+ * Testa o TAD Circulo
+ *
+ * Retorna int: 0 para sucesso; senao 1
+ */
+int testar_circulo(void) {
+	/* Testa criacao de circulos */
+	Circulo* c1 = circulo_cria(0, 0, 5); /* Circulo com centro em (0, 0) e raio 5 */
+	Circulo* c2 = circulo_cria(1, 1, 2); /* Circulo com centro em (1, 1) e raio 2 */
+
+	if (c1 == NULL) return STATUS_ERR;
+	if (c2 == NULL) return STATUS_ERR;
+
+	/* Libera memoria apos teste */
+	circulo_libera(c1);
+	circulo_libera(c2);
+
+	/* Testa acesso a atributos de um circulo */
+	Circulo* c3 = circulo_cria(0, 0, 5); /* Circulo com centro em (0, 0) e raio 5 */
+
+	float x, y, r; /* Variaveis para armazenar atributos de c */
+
+	circulo_acessa(c3, &x, &y, &r);
+
+	if (x != 0 || y != 0 || r != 5) return STATUS_ERR;
+
+	/* Libera memoria apos teste */
+	circulo_libera(c3);
+
+	/* Testa atribuicao de novos atributos */
+	Circulo* c4 = circulo_cria(0, 0, 5); /* Circulo com centro em (0, 0) e raio 5 */
+
+	float new_x = 1, new_y = 1, new_r = 2; /* Variaveis com novos atributos de c */
+
+	circulo_atribui(c4, new_x, new_y, new_r);
+
+	float x2, y2, r2; /* Variaveis para armazenar atributos de c apos atribuicao */
+
+	circulo_acessa(c4, &x2, &y2, &r2);
+
+	if (x2 != new_x || y2 != new_y || r2 != new_r) return STATUS_ERR;
+
+	/* Libera memoria apos teste */
+	circulo_libera(c4);
+
+	/* Testa calculo de area de um circulo */
+	Circulo* c5 = circulo_cria(0, 0, 5); /* Circulo com centro em (0, 0) e raio 5 */
+
+	float area = circulo_area(c5); /* Variavel para armazenar area de c5 */
+
+	if (!EQUAL(area, 78.5398163375)) return STATUS_ERR;
+
+	/* Libera memoria apos teste */
+	circulo_libera(c5);
+
+	/* Testa se um ponto pertence a um circulo */
+	Circulo* c6 = circulo_cria(0, 0, 5); /* Circulo com centro em (0, 0) e raio 5 */
+	Ponto* p1 = ponto_cria(3, 4); /* Ponto (3, 4) */
+
+
+	if (!circulo_pertence(c6, p1)) return STATUS_ERR;
+
+	/* Libera memoria apos teste */
+	circulo_libera(c6);
+	ponto_libera(p1);
+
+	/* == FIM DOS TESTES */
+	return STATUS_OK;
+}
+
 /* ==============================
  * MAIN
  * ============================== */
@@ -85,6 +156,13 @@ int main(void) {
 		return STATUS_ERR;
 	} else {
 		printf("Teste do TAD Ponto passou\n");
+	}
+
+	if (testar_circulo() == STATUS_ERR) {
+		printf("Teste do TAD Circulo falhou\n");
+		return STATUS_ERR;
+	} else {
+		printf("Teste do TAD Circulo passou\n");
 	}
 
 	return STATUS_OK;

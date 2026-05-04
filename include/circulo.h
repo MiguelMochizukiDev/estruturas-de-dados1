@@ -1,0 +1,81 @@
+/**
+ * circulo.h
+ * Autor: Miguel Mochizuki Silva
+ * Descricao:
+ * Interface do TAD Circulo, implementado em src/circulo.c
+ */
+#ifndef CIRCULO_H
+#define CIRCULO_H
+
+/* Dependencia de modulos */
+#include "ponto.h"
+
+/* Tipo exportado */
+typedef struct circulo_t Circulo;
+
+/* Funcoes exportadas */
+
+/**
+ * Aloca e retorna um circulo no plano cartesiano, com centro em (x, y) e raio r
+ *
+ * Parametros:
+ * float x: abcissa do centro do circulo
+ * float y: ordenada do centro do circulo
+ * float r: raio do circulo
+ *
+ * Retorna Circulo*: circulo com centro em (x, y) e raio r
+ */
+Circulo* circulo_cria(float x, float y, float r);
+
+/**
+ * Libera a memoria de um circulo previamente criado
+ *
+ * Parametros:
+ * Circulo* c: ponteiro para um circulo
+ */
+void circulo_libera(Circulo *c);
+
+/**
+ * Retorna os valores do centro e do raio de um circulo
+ *
+ * Parametros:
+ * Circulo* c: ponteiro para um circulo
+ * float* x: armazena abcissa do centro do circulo
+ * float* y: armazena ordenada do centro do circulo
+ * float* r: armazena o raio do circulo
+ */
+void circulo_acessa(Circulo* c, float* x, float* y, float* r);
+
+/**
+ * Atribui novos valores as coordenadas do centro e ao raio de um circulo
+ *
+ * Parametros:
+ * Circulo* c: ponteiro para um circulo
+ * float x: nova abcissa do centro do circulo
+ * float y: nova ordenada do centro do circulo
+ * float r: novo raio do circulo
+ */
+void circulo_atribui(Circulo* c, float x, float y, float r);
+
+/**
+ * Retorna a area de um circulo
+ *
+ * Parametros:
+ * Circulo* c: ponteiro para um circulo
+ *
+ * Retorna float: a area do circulo
+ */
+float circulo_area(Circulo* c);
+
+/**
+ * Retorna se um ponto pertence a um circulo
+ *
+ * Parametros:
+ * Circulo* c: ponteiro para um circulo
+ * Ponto* p: ponteiro para um ponto
+ *
+ * Retorna int: 1 se o ponto pertence ao circulo, 0 caso contrario
+ */
+int circulo_pertence(Circulo* c, Ponto* p);
+
+#endif
