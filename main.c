@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include "ponto.h"
 #include "circulo.h"
+#include "matriz.h"
 
 #define STATUS_OK 0 /* Status de sucesso */
 #define STATUS_ERR 1 /* Status de erro */
@@ -146,6 +147,50 @@ int testar_circulo(void) {
 	return STATUS_OK;
 }
 
+/**
+ * Testa o TAD Matriz
+ *
+ * Retorna int: 0 para sucesso; senao 1
+ */
+int testar_matriz(void) {
+	/* Testa criacao de matrizes */
+	Matriz* m1 = matriz_cria(2, 3); /* Matriz de dimensao 2x3 */
+	Matriz* m2 = matriz_cria(4, 5); /* Matriz de dimensao 4x5 */
+
+	if (m1 == NULL) return STATUS_ERR;
+	if (m2 == NULL) return STATUS_ERR;
+
+	/* Libera memoria apos teste */
+	matriz_libera(m1);
+	matriz_libera(m2);
+
+	/* Testa acesso a elementos de uma matriz */
+	Matriz* m3 = matriz_cria(2, 3); /* Matriz de dimensao 2x3 */
+
+	float element = matriz_acessa(m3, 0, 0); /* Variavel para armazenar elemento da linha 0 e coluna 0 */
+
+	/* Conforme implementacao */
+	if (element != 0) return STATUS_ERR;
+
+	/* Libera memoria apos teste */
+	matriz_libera(m3);
+
+	/* Testa atribuicao de novo valor a um elemento da matriz */
+	Matriz* m4 = matriz_cria(2, 3); /* Matriz de dimensao 2x3 */
+
+	matriz_atribui(m4, 0, 0, 5); /* Atribui o valor 5 ao elemento da linha 0 e coluna 0 */
+
+	float element2 = matriz_acessa(m4, 0, 0); /* Variavel para armazenar elemento da linha 0 e coluna 0 apos atribuicao */
+
+	if (element2 != 5) return STATUS_ERR;
+
+	/* Libera memoria apos teste */
+	matriz_libera(m4);
+
+	/* == FIM DOS TESTES */
+	return STATUS_OK;
+}
+
 /* ==============================
  * MAIN
  * ============================== */
@@ -163,6 +208,13 @@ int main(void) {
 		return STATUS_ERR;
 	} else {
 		printf("Teste do TAD Circulo passou\n");
+	}
+
+	if (testar_matriz() == STATUS_ERR) {
+		printf("Teste do TAD Matriz falhou\n");
+		return STATUS_ERR;
+	} else {
+		printf("Teste do TAD Matriz passou\n");
 	}
 
 	return STATUS_OK;
