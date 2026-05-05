@@ -29,7 +29,9 @@ Nosso objetivo com este estudo é garantir que o processamento de dados seja **e
 - Seguro: que o processamento não desvie do comportamento projetado pelo programador
 - Econômico: que o menor número de etapas e de recursos computacionais, hardware e software, seja requerido para a tarefa
 
-### Sobre o que computamos?
+## Dados
+
+## Sobre o que computamos?
 
 Computamos sobre **dados**, representados por bits, ou seja, codificados em zeros e uns que podem ser interpretados pelo computador.
 
@@ -98,8 +100,8 @@ char *q = (char *)p;
 
 ### Modificadores de tipo de acesso (ANSI C)
 
-* `const` - somente leitura
-* `volatile` - impede otimizações
+- `const` - somente leitura
+- `volatile` - impede otimizações
 
 ### Onde as variáveis são declaradas
 
@@ -114,10 +116,10 @@ As variáveis têm **escopo**, isto é, só podem ser referenciadas em regiões 
 
 A partir dos tipos primitivos:
 
-* Ponteiros (`tipo*`)
-* Arrays (`tipo nome[tamanho]`)
-* Estruturas (`struct`)
-* Uniões (`union`)
-* Enumerações (`enum`)
+- Ponteiros (`tipo*`)
+- Arrays (`tipo nome[tamanho]`)
+- Estruturas (`struct`)
+- Uniões (`union`)
+- Enumerações (`enum`)
 
 Esses mecanismos permitem implementar listas, pilhas, filas, árvores etc.
