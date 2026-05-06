@@ -19,14 +19,14 @@
  *
  * Atributos:
  * Ponto* centro: ponteiro para o centro do circulo
- * float raio: raio do circulo
+ * double raio: raio do circulo
  */
 struct circulo_t {
 	Ponto* centro;
-	float raio;
+	double raio;
 };
 
-Circulo* circulo_cria(float x, float y, float r) {
+Circulo* circulo_cria(double x, double y, double r) {
 	Circulo* c = (Circulo*)malloc(sizeof(Circulo));
 	if (c == NULL) {
 		printf("Memoria insuficiente!\n");
@@ -44,17 +44,17 @@ void circulo_libera(Circulo* c) {
 	free(c);
 }
 
-void circulo_acessa(Circulo* c, float* x, float* y, float* r) {
+void circulo_acessa(Circulo* c, double* x, double* y, double* r) {
 	ponto_acessa(c->centro, x, y);
 	*r = c->raio;
 }
 
-void circulo_atribui(Circulo* c, float x, float y, float r) {
+void circulo_atribui(Circulo* c, double x, double y, double r) {
 	ponto_atribui(c->centro, x, y);
 	c->raio = r;
 }
 
-float circulo_area(Circulo* c) {
+double circulo_area(Circulo* c) {
 	return PI * c->raio * c->raio;
 }
 

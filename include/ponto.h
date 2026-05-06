@@ -16,12 +16,12 @@ typedef struct ponto_t Ponto;
  * Aloca e retorna um ponto no plano cartesiano, com coordenadas (x, y)
  *
  * Parametros:
- * float x: abcissa do ponto
- * float y: ordenada do ponto
+ * double x: abcissa do ponto
+ * double y: ordenada do ponto
  *
  * Retorna Ponto*: ponto com coordenadas (x, y)
  */
-Ponto* ponto_cria(float x, float y);
+Ponto* ponto_cria(double x, double y);
 
 /**
  * Libera a memoria de um ponto previamente criado
@@ -36,20 +36,20 @@ void ponto_libera(Ponto *p);
  *
  * Parametros:
  * Ponto* p: ponteiro para um ponto
- * float* x: armazena abcissa do ponto
- * float* y: armazena ordenada do ponto
+ * double* x: armazena abcissa do ponto
+ * double* y: armazena ordenada do ponto
  */
-void ponto_acessa(Ponto* p, float* x, float* y);
+void ponto_acessa(Ponto* p, double* x, double* y);
 
 /**
  * Atribui novos valores as coordenadas de um ponto
  *
  * Parametros:
  * Ponto* p: ponteiro para um ponto
- * float x: nova abcissa do ponto
- * float y: nova ordenada do ponto
+ * double x: nova abcissa do ponto
+ * double y: nova ordenada do ponto
  */
-void ponto_atribui(Ponto* p, float x, float y);
+void ponto_atribui(Ponto* p, double x, double y);
 
 /**
  * Retorna a distancia entre dois pontos
@@ -58,8 +58,8 @@ void ponto_atribui(Ponto* p, float x, float y);
  * Ponto* p1: ponteiro para um ponto
  * Ponto* p2: ponteiro para um ponto
  *
- * Retorna float: a distancia entre os pontos
+ * Retorna double: a distancia entre os pontos
  */
-float ponto_distancia(Ponto* p1, Ponto* p2);
+double ponto_distancia(Ponto* p1, Ponto* p2);
 
 #endif

@@ -13,8 +13,8 @@
 #define STATUS_OK 0 /* Status de sucesso */
 #define STATUS_ERR 1 /* Status de erro */
 
-#define EPSILON 1E-6
-#define EQUAL(x, y) ((((x) - (y)) < EPSILON) || ((y) - (x)) < EPSILON)
+#define EPSILON 1E-3
+#define EQUAL(x, y) (((x) - (y)) < EPSILON) && (((x) - (y)) > -EPSILON)
 
 /* ==============================
  * Funcoes de teste para as estruturas de dados
@@ -40,7 +40,7 @@ int testar_ponto(void) {
 	/* Testa acesso a coordenadas de um ponto */
 	Ponto* p3 = ponto_cria(3, 4); /* Ponto (3, 4) */
 
-	float x, y; /* Variaveis para armazenar coordenadas de p */
+	double x, y; /* Variaveis para armazenar coordenadas de p */
 
 	ponto_acessa(p3, &x, &y);
 
@@ -52,11 +52,11 @@ int testar_ponto(void) {
 	/* Testa atribuicao de novas coordenadas */
 	Ponto* p4 = ponto_cria(3, 4); /* Ponto (3, 4) */
 
-	float new_x = 5, new_y = 6; /* Variaveis com novas coordenadas de p */
+	double new_x = 5, new_y = 6; /* Variaveis com novas coordenadas de p */
 
 	ponto_atribui(p4, new_x, new_y);
 
-	float x2, y2; /* Variaveis para armazenar coordenadas de p apos atribuicao */
+	double x2, y2; /* Variaveis para armazenar coordenadas de p apos atribuicao */
 
 	ponto_acessa(p4, &x2, &y2);
 
@@ -69,7 +69,7 @@ int testar_ponto(void) {
 	Ponto* p5 = ponto_cria(3, 4);
 	Ponto* p6 = ponto_cria(0, 0);
 
-	float distance = ponto_distancia(p5, p6); /* Variavel para armazenar distancia entre p5 e p6 */
+	double distance = ponto_distancia(p5, p6); /* Variavel para armazenar distancia entre p5 e p6 */
 
 	if (!EQUAL(distance, 5)) return STATUS_ERR;
 
@@ -97,7 +97,7 @@ int testar_circulo(void) {
 	/* Testa acesso a atributos de um circulo */
 	Circulo* c3 = circulo_cria(0, 0, 5); /* Circulo com centro em (0, 0) e raio 5 */
 
-	float x, y, r; /* Variaveis para armazenar atributos de c */
+	double x, y, r; /* Variaveis para armazenar atributos de c */
 
 	circulo_acessa(c3, &x, &y, &r);
 
@@ -109,11 +109,11 @@ int testar_circulo(void) {
 	/* Testa atribuicao de novos atributos */
 	Circulo* c4 = circulo_cria(0, 0, 5); /* Circulo com centro em (0, 0) e raio 5 */
 
-	float new_x = 1, new_y = 1, new_r = 2; /* Variaveis com novos atributos de c */
+	double new_x = 1, new_y = 1, new_r = 2; /* Variaveis com novos atributos de c */
 
 	circulo_atribui(c4, new_x, new_y, new_r);
 
-	float x2, y2, r2; /* Variaveis para armazenar atributos de c apos atribuicao */
+	double x2, y2, r2; /* Variaveis para armazenar atributos de c apos atribuicao */
 
 	circulo_acessa(c4, &x2, &y2, &r2);
 
@@ -125,7 +125,7 @@ int testar_circulo(void) {
 	/* Testa calculo de area de um circulo */
 	Circulo* c5 = circulo_cria(0, 0, 5); /* Circulo com centro em (0, 0) e raio 5 */
 
-	float area = circulo_area(c5); /* Variavel para armazenar area de c5 */
+	double area = circulo_area(c5); /* Variavel para armazenar area de c5 */
 
 	if (!EQUAL(area, 78.5398163375)) return STATUS_ERR;
 
@@ -167,7 +167,7 @@ int testar_matriz(void) {
 	/* Testa acesso a elementos de uma matriz */
 	Matriz* m3 = matriz_cria(2, 3); /* Matriz de dimensao 2x3 */
 
-	float element = matriz_acessa(m3, 0, 0); /* Variavel para armazenar elemento da linha 0 e coluna 0 */
+	double element = matriz_acessa(m3, 0, 0); /* Variavel para armazenar elemento da linha 0 e coluna 0 */
 
 	/* Conforme implementacao */
 	if (element != 0) return STATUS_ERR;

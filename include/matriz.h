@@ -57,9 +57,9 @@ int matriz_colunas(Matriz* mat);
  * int i: indice da linha do elemento a ser acessado
  * int j: indice da coluna do elemento a ser acessado
  *
- * Retorna float: valor do elemento da linha i e coluna j da matriz
+ * Retorna double: valor do elemento da linha i e coluna j da matriz
  */
-float matriz_acessa(Matriz* mat, int i, int j);
+double matriz_acessa(Matriz* mat, int i, int j);
 
 /**
  * Atribui novo valor ao elemento da linha i e coluna j de uma matriz
@@ -68,8 +68,8 @@ float matriz_acessa(Matriz* mat, int i, int j);
  * Matriz* mat: ponteiro para uma matriz
  * int i: indice da linha do elemento a ser atribuido
  * int j: indice da coluna do elemento a ser atribuido
- * float valor: valor a ser atribuido ao elemento da linha i e coluna j da matriz
+ * double valor: valor a ser atribuido ao elemento da linha i e coluna j da matriz
  */
-void matriz_atribui(Matriz* mat, int i, int j, float valor);
+void matriz_atribui(Matriz* mat, int i, int j, double valor);
 
 #endif
