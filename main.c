@@ -91,15 +91,15 @@ int testar_circulo(void) {
 	if (c2 == NULL) return STATUS_ERR;
 
 	/* Libera memoria apos teste */
-	circulo_libera(c1);
-	circulo_libera(c2);
+	if (circulo_libera(c1)) return STATUS_ERR;
+	if (circulo_libera(c2)) return STATUS_ERR;
 
 	/* Testa acesso a atributos de um circulo */
 	Circulo* c3 = circulo_cria(0, 0, 5); /* Circulo com centro em (0, 0) e raio 5 */
 
 	double x, y, r; /* Variaveis para armazenar atributos de c */
 
-	circulo_acessa(c3, &x, &y, &r);
+	if (circulo_acessa(c3, &x, &y, &r)) return STATUS_ERR;
 
 	if (x != 0 || y != 0 || r != 5) return STATUS_ERR;
 
@@ -111,11 +111,11 @@ int testar_circulo(void) {
 
 	double new_x = 1, new_y = 1, new_r = 2; /* Variaveis com novos atributos de c */
 
-	circulo_atribui(c4, new_x, new_y, new_r);
+	if (circulo_atribui(c4, new_x, new_y, new_r)) return STATUS_ERR;
 
 	double x2, y2, r2; /* Variaveis para armazenar atributos de c apos atribuicao */
 
-	circulo_acessa(c4, &x2, &y2, &r2);
+	if (circulo_acessa(c4, &x2, &y2, &r2)) return STATUS_ERR;
 
 	if (x2 != new_x || y2 != new_y || r2 != new_r) return STATUS_ERR;
 
@@ -125,7 +125,8 @@ int testar_circulo(void) {
 	/* Testa calculo de area de um circulo */
 	Circulo* c5 = circulo_cria(0, 0, 5); /* Circulo com centro em (0, 0) e raio 5 */
 
-	double area = circulo_area(c5); /* Variavel para armazenar area de c5 */
+	double area;
+	if (circulo_area(c5, &area)) return STATUS_ERR;
 
 	if (!EQUAL(area, 78.5398163375)) return STATUS_ERR;
 

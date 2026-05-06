@@ -23,7 +23,7 @@ typedef struct circulo_t Circulo;
  * double y: ordenada do centro do circulo
  * double r: raio do circulo
  *
- * Retorna Circulo*: circulo com centro em (x, y) e raio r
+ * Retorna Circulo*: circulo com centro em (x, y) e raio r; NULL se memoria insuficiente
  */
 Circulo* circulo_cria(double x, double y, double r);
 
@@ -32,8 +32,10 @@ Circulo* circulo_cria(double x, double y, double r);
  *
  * Parametros:
  * Circulo* c: ponteiro para um circulo
+ *
+ * Retorna int: 0 se circulo liberado com sucesso; -1 se ponteiro nulo
  */
-void circulo_libera(Circulo *c);
+int circulo_libera(Circulo *c);
 
 /**
  * Retorna os valores do centro e do raio de um circulo
@@ -43,8 +45,10 @@ void circulo_libera(Circulo *c);
  * double* x: armazena abcissa do centro do circulo
  * double* y: armazena ordenada do centro do circulo
  * double* r: armazena o raio do circulo
+ *
+ * Retorna int: 0 se atributos acessados com sucesso; -1 se ponteiro nulo
  */
-void circulo_acessa(Circulo* c, double* x, double* y, double* r);
+int circulo_acessa(Circulo* c, double* x, double* y, double* r);
 
 /**
  * Atribui novos valores as coordenadas do centro e ao raio de um circulo
@@ -54,18 +58,21 @@ void circulo_acessa(Circulo* c, double* x, double* y, double* r);
  * double x: nova abcissa do centro do circulo
  * double y: nova ordenada do centro do circulo
  * double r: novo raio do circulo
+ *
+ * Retorna int: 0 se atributos atribuidos com sucesso; -1 se ponteiro nulo
  */
-void circulo_atribui(Circulo* c, double x, double y, double r);
+int circulo_atribui(Circulo* c, double x, double y, double r);
 
 /**
  * Retorna a area de um circulo
  *
  * Parametros:
  * Circulo* c: ponteiro para um circulo
+ * double* area: armazena a area do circulo
  *
- * Retorna double: a area do circulo
+ * Retorna int: 0 se area acessada com sucesso; -1 se ponteiro nulo
  */
-double circulo_area(Circulo* c);
+int circulo_area(Circulo* c, double* area);
 
 /**
  * Retorna se um ponto pertence a um circulo
@@ -74,7 +81,7 @@ double circulo_area(Circulo* c);
  * Circulo* c: ponteiro para um circulo
  * Ponto* p: ponteiro para um ponto
  *
- * Retorna int: 1 se o ponto pertence ao circulo, 0 caso contrario
+ * Retorna int: 1 se o ponto pertence ao circulo, 0 se nao, -1 se ponteiro nulo
  */
 int circulo_pertence(Circulo* c, Ponto* p);
 
