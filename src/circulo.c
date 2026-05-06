@@ -59,5 +59,7 @@ double circulo_area(Circulo* c) {
 }
 
 int circulo_pertence(Circulo* c, Ponto* p) {
-	return ponto_distancia(c->centro, p) <= c->raio;
+	double distancia;
+	ponto_distancia(c->centro, p, &distancia);
+	return distancia <= c->raio;
 }

@@ -19,7 +19,7 @@ typedef struct ponto_t Ponto;
  * double x: abcissa do ponto
  * double y: ordenada do ponto
  *
- * Retorna Ponto*: ponto com coordenadas (x, y)
+ * Retorna Ponto*: ponto com coordenadas (x, y); NULL se memoria insuficiente
  */
 Ponto* ponto_cria(double x, double y);
 
@@ -28,8 +28,10 @@ Ponto* ponto_cria(double x, double y);
  *
  * Parametros:
  * Ponto* p: ponteiro para um ponto
+ *
+ * Retorna int: 0 se ponto liberado com sucesso; -1 se ponteiro nulo
  */
-void ponto_libera(Ponto *p);
+int ponto_libera(Ponto *p);
 
 /**
  * Retorna os valores das coordenadas de um ponto
@@ -38,8 +40,10 @@ void ponto_libera(Ponto *p);
  * Ponto* p: ponteiro para um ponto
  * double* x: armazena abcissa do ponto
  * double* y: armazena ordenada do ponto
+ *
+ * Retorna int: 0 se coordenadas acessadas com sucesso; -1 se ponteiro nulo
  */
-void ponto_acessa(Ponto* p, double* x, double* y);
+int ponto_acessa(Ponto* p, double* x, double* y);
 
 /**
  * Atribui novos valores as coordenadas de um ponto
@@ -48,8 +52,10 @@ void ponto_acessa(Ponto* p, double* x, double* y);
  * Ponto* p: ponteiro para um ponto
  * double x: nova abcissa do ponto
  * double y: nova ordenada do ponto
+ *
+ * Retorna int: 0 se coordenadas atribuidas com sucesso; -1 se ponteiro nulo
  */
-void ponto_atribui(Ponto* p, double x, double y);
+int ponto_atribui(Ponto* p, double x, double y);
 
 /**
  * Retorna a distancia entre dois pontos
@@ -57,9 +63,10 @@ void ponto_atribui(Ponto* p, double x, double y);
  * Parametros:
  * Ponto* p1: ponteiro para um ponto
  * Ponto* p2: ponteiro para um ponto
+ * double* distancia: armazena a distancia entre os pontos
  *
- * Retorna double: a distancia entre os pontos
+ * Retorna int: 0 se distancia calculada com sucesso; -1 se ponteiro nulo
  */
-double ponto_distancia(Ponto* p1, Ponto* p2);
+int ponto_distancia(Ponto* p1, Ponto* p2, double* distancia);
 
 #endif

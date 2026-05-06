@@ -34,16 +34,15 @@ int testar_ponto(void) {
 	if (p2 == NULL) return STATUS_ERR;
 
 	/* Libera memoria apos teste */
-	ponto_libera(p1);
-	ponto_libera(p2);
+	if (ponto_libera(p1)) return STATUS_ERR;
+	if (ponto_libera(p2)) return STATUS_ERR;
 
 	/* Testa acesso a coordenadas de um ponto */
 	Ponto* p3 = ponto_cria(3, 4); /* Ponto (3, 4) */
 
 	double x, y; /* Variaveis para armazenar coordenadas de p */
 
-	ponto_acessa(p3, &x, &y);
-
+	if (ponto_acessa(p3, &x, &y)) return STATUS_ERR;
 	if (x != 3 || y != 4) return STATUS_ERR;
 
 	/* Libera memoria apos teste */
@@ -54,11 +53,11 @@ int testar_ponto(void) {
 
 	double new_x = 5, new_y = 6; /* Variaveis com novas coordenadas de p */
 
-	ponto_atribui(p4, new_x, new_y);
+	if (ponto_atribui(p4, new_x, new_y)) return STATUS_ERR;
 
 	double x2, y2; /* Variaveis para armazenar coordenadas de p apos atribuicao */
 
-	ponto_acessa(p4, &x2, &y2);
+	if (ponto_acessa(p4, &x2, &y2)) return STATUS_ERR;
 
 	if (x2 != new_x || y2 != new_y) return STATUS_ERR;
 
@@ -69,7 +68,8 @@ int testar_ponto(void) {
 	Ponto* p5 = ponto_cria(3, 4);
 	Ponto* p6 = ponto_cria(0, 0);
 
-	double distance = ponto_distancia(p5, p6); /* Variavel para armazenar distancia entre p5 e p6 */
+	double distance;
+	if (ponto_distancia(p5, p6, &distance)) return STATUS_ERR;
 
 	if (!EQUAL(distance, 5)) return STATUS_ERR;
 
