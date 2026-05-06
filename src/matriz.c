@@ -28,54 +28,47 @@ struct matriz_t {
 
 Matriz* matriz_cria(int m, int n) {
 	Matriz* mat = (Matriz*)malloc(sizeof(Matriz));
-	if (mat == NULL) {
-		printf("Memoria insuficiente!\n");
-		exit(1);
-	}
+	if (mat == NULL) return NULL;
 
 	mat->lin = m;
 	mat->col = n;
 
-	mat->dados = (double*)malloc(m * n * sizeof(double));
+	mat->dados = (double*)calloc(m * n, sizeof(double));
 	if (mat->dados == NULL) {
-		printf("Memoria insuficiente!\n");
-		free(mat); /* Libera espaco previamente alocado para a matriz */
-		exit(1);
-	}
-
-	/* Zera valores da matriz */
-	for (int i = 0; i < m * n; i++) {
-		mat->dados[i] = 0;
+		matriz_libera(mat);
+		return NULL;
 	}
 
 	return mat;
 }
 
-void matriz_libera(Matriz* mat) {
+int matriz_libera(Matriz* mat) {
+	if (mat == NULL) return -1;
 	free(mat->dados);
 	free(mat);
+	return 0;
 }
 
 int matriz_linhas(Matriz* mat) {
+	if (mat == NULL) return -1;
 	return mat->lin;
 }
 
 int matriz_colunas(Matriz* mat) {
+	if (mat == NULL) return -1;
 	return mat->col;
 }
 
-double matriz_acessa(Matriz* mat, int i, int j) {
-	if (i < 0 || i >= mat->lin || j < 0 || j >= mat->col) {
-		printf("Indice fora dos limites da matriz!\n");
-		exit(1);
-	}
-	return mat->dados[i * mat->col + j]; /* Acessa o elemento usando row-major indexing */
+int matriz_acessa(Matriz* mat, int i, int j, double* valor) {
+	if (mat == NULL || valor == NULL) return -1;
+	if (i < 0 || i >= mat->lin || j < 0 || j >= mat->col) return -2;
+	*valor = mat->dados[i * mat->col + j];
+	return 0;
 }
 
-void matriz_atribui(Matriz* mat, int i, int j, double valor) {
-	if (i < 0 || i >= mat->lin || j < 0 || j >= mat->col) {
-		printf("Indice fora dos limites da matriz!\n");
-		exit(1);
-	}
-	mat->dados[i * mat->col + j] = valor; /* Atribui o valor usando row-major indexing */
+int matriz_atribui(Matriz* mat, int i, int j, double valor) {
+	if (mat == NULL) return -1;
+	if (i < 0 || i >= mat->lin || j < 0 || j >= mat->col) return -2;
+	mat->dados[i * mat->col + j] = valor;
+	return 0;
 }

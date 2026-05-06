@@ -18,6 +18,8 @@ typedef struct matriz_t Matriz;
  * Parametros:
  * int m: numero de linhas da matriz
  * int n: numero de colunas da matriz
+ *
+ * Retorna Matriz*: matriz de m linhas e n colunas; NULL se memoria insuficiente
  */
 Matriz* matriz_cria(int m, int n);
 
@@ -26,8 +28,10 @@ Matriz* matriz_cria(int m, int n);
  *
  * Parametros:
  * Matriz* mat: ponteiro para uma matriz
+ *
+ * Retorna int: 0 se matriz liberada com sucesso; -1 se ponteiro nulo
  */
-void matriz_libera(Matriz* mat);
+int matriz_libera(Matriz* mat);
 
 /**
  * Retorna o numero de linhas de uma matriz
@@ -35,7 +39,7 @@ void matriz_libera(Matriz* mat);
  * Parametros:
  * Matriz* mat: ponteiro para uma matriz
  *
- * Retorna int: numero de linhas da matriz
+ * Retorna int: numero de linhas da matriz; -1 se ponteiro nulo
  */
 int matriz_linhas(Matriz* mat);
 
@@ -45,7 +49,7 @@ int matriz_linhas(Matriz* mat);
  * Parametros:
  * Matriz* mat: ponteiro para uma matriz
  *
- * Retorna int: numero de colunas da matriz
+ * Retorna int: numero de colunas da matriz; -1 se ponteiro nulo
  */
 int matriz_colunas(Matriz* mat);
 
@@ -56,10 +60,11 @@ int matriz_colunas(Matriz* mat);
  * Matriz* mat: ponteiro para uma matriz
  * int i: indice da linha do elemento a ser acessado
  * int j: indice da coluna do elemento a ser acessado
+ * double* valor: armazena o valor do elemento da linha i e coluna j da matriz
  *
- * Retorna double: valor do elemento da linha i e coluna j da matriz
+ * Retorna int: 0 se elemento acessado com sucesso; -1 se ponteiro nulo; -2 se indices fora dos limites da matriz
  */
-double matriz_acessa(Matriz* mat, int i, int j);
+int matriz_acessa(Matriz* mat, int i, int j, double* valor);
 
 /**
  * Atribui novo valor ao elemento da linha i e coluna j de uma matriz
@@ -69,7 +74,9 @@ double matriz_acessa(Matriz* mat, int i, int j);
  * int i: indice da linha do elemento a ser atribuido
  * int j: indice da coluna do elemento a ser atribuido
  * double valor: valor a ser atribuido ao elemento da linha i e coluna j da matriz
+ *
+ * Retorna int: 0 se elemento atribuido com sucesso; -1 se ponteiro nulo; -2 se indices fora dos limites da matriz
  */
-void matriz_atribui(Matriz* mat, int i, int j, double valor);
+int matriz_atribui(Matriz* mat, int i, int j, double valor);
 
 #endif

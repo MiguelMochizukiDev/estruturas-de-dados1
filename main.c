@@ -162,15 +162,14 @@ int testar_matriz(void) {
 	if (m2 == NULL) return STATUS_ERR;
 
 	/* Libera memoria apos teste */
-	matriz_libera(m1);
-	matriz_libera(m2);
+	if (matriz_libera(m1)) return STATUS_ERR;
+	if (matriz_libera(m2)) return STATUS_ERR;
 
 	/* Testa acesso a elementos de uma matriz */
 	Matriz* m3 = matriz_cria(2, 3); /* Matriz de dimensao 2x3 */
 
-	double element = matriz_acessa(m3, 0, 0); /* Variavel para armazenar elemento da linha 0 e coluna 0 */
-
-	/* Conforme implementacao */
+	double element; /* Variavel para armazenar elemento da linha 0 e coluna 0 */
+	if (matriz_acessa(m3, 0, 0, &element)) return STATUS_ERR;
 	if (element != 0) return STATUS_ERR;
 
 	/* Libera memoria apos teste */
@@ -179,10 +178,10 @@ int testar_matriz(void) {
 	/* Testa atribuicao de novo valor a um elemento da matriz */
 	Matriz* m4 = matriz_cria(2, 3); /* Matriz de dimensao 2x3 */
 
-	matriz_atribui(m4, 0, 0, 5); /* Atribui o valor 5 ao elemento da linha 0 e coluna 0 */
+	if (matriz_atribui(m4, 0, 0, 5)) return STATUS_ERR; /* Atribui o valor 5 ao elemento da linha 0 e coluna 0 */
 
-	float element2 = matriz_acessa(m4, 0, 0); /* Variavel para armazenar elemento da linha 0 e coluna 0 apos atribuicao */
-
+	double element2; /* Variavel para armazenar elemento da linha 0 e coluna 0 apos atribuicao */
+	if (matriz_acessa(m4, 0, 0, &element2)) return STATUS_ERR;
 	if (element2 != 5) return STATUS_ERR;
 
 	/* Libera memoria apos teste */
