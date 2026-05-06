@@ -17,15 +17,15 @@
  * Estrutura para ponto
  *
  * Atributos:
- * float x: abcissa do ponto
- * float y: ordenada do ponto
+ * double x: abcissa do ponto
+ * double y: ordenada do ponto
  */
 struct ponto_t {
-	float x;
-	float y;
+	double x;
+	double y;
 };
 
-Ponto* ponto_cria(float x, float y) {
+Ponto* ponto_cria(double x, double y) {
 	Ponto* p = (Ponto*)malloc(sizeof(Ponto));
 	if (p == NULL) {
 		printf("Memoria insuficiente!\n");
@@ -42,19 +42,19 @@ void ponto_libera(Ponto* p) {
 	free(p);
 }
 
-void ponto_acessa(Ponto* p, float* x, float* y) {
+void ponto_acessa(Ponto* p, double* x, double* y) {
 	*x = p->x;
 	*y = p->y;
 }
 
-void ponto_atribui(Ponto* p, float x, float y) {
+void ponto_atribui(Ponto* p, double x, double y) {
 	p->x = x;
 	p->y = y;
 }
 
-float ponto_distancia(Ponto* p1, Ponto* p2) {
-	float dx = p2->x - p1->x;
-	float dy = p2->y - p2->y;
+double ponto_distancia(Ponto* p1, Ponto* p2) {
+	double dx = p2->x - p1->x;
+	double dy = p2->y - p1->y;
 	return sqrt(dx*dx + dy*dy);
 }
 
