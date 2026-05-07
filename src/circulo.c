@@ -4,10 +4,8 @@
  * Descricao:
  * Implementa interface do TAD Circulo, conforme include/circulo.h
  */
-#include <stdio.h>
 #include <stdlib.h>
 #include "circulo.h"
-#include "status.h"
 
 /* ==============================
  * Defines

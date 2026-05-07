@@ -4,10 +4,8 @@
  * Descricao:
  * Implementa interface do TAD Matriz, conforme include/matriz.h
  */
-#include <stdio.h>
 #include <stdlib.h>
 #include "matriz.h"
-#include "status.h"
 
 /* ==============================
  * Implementacoes
@@ -45,7 +43,7 @@ Matriz* matriz_cria(int m, int n) {
 
 Status matriz_libera(Matriz* mat) {
 	if (mat == NULL) return STATUS_ERR_NULL;
-	
+
 	free(mat->dados);
 	free(mat);
 	return STATUS_OK;

@@ -4,11 +4,9 @@
  * Descricao:
  * Implementa interface do TAD Ponto, conforme include/ponto.h
  */
-#include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include "ponto.h"
-#include "status.h"
 
 /* ==============================
  * Implementacoes
@@ -59,7 +57,7 @@ Status ponto_atribui(Ponto* p, double x, double y) {
 	if (p == NULL) {
 		return STATUS_ERR_NULL;
 	}
-	
+
 	p->x = x;
 	p->y = y;
 	return STATUS_OK;
