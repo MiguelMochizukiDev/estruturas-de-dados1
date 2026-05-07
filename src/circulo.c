@@ -7,6 +7,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "circulo.h"
+#include "status.h"
+
+/* ==============================
+ * Defines
+ * ============================== */
 
 #define PI 3.1415926535 /* Pi ate a decima casa decimal */
 
@@ -41,42 +46,44 @@ Circulo* circulo_cria(double x, double y, double r) {
 	return c;
 }
 
-int circulo_libera(Circulo* c) {
-	if (c == NULL) return -1;
+Status circulo_libera(Circulo* c) {
+	if (c == NULL) return STATUS_ERR_NULL;
 
 	ponto_libera(c->centro);
 	free(c);
-	return 0;
+	return STATUS_OK;
 }
 
-int circulo_acessa(Circulo* c, double* x, double* y, double* r) {
-	if (c == NULL || x == NULL || y == NULL || r == NULL) return -1;
+Status circulo_acessa(Circulo* c, double* x, double* y, double* r) {
+	if (c == NULL || x == NULL || y == NULL || r == NULL) return STATUS_ERR_NULL;
 
 	ponto_acessa(c->centro, x, y);
 	*r = c->raio;
-	return 0;
+	return STATUS_OK;
 }
 
 
-int circulo_atribui(Circulo* c, double x, double y, double r) {
-	if (c == NULL) return -1;
+Status circulo_atribui(Circulo* c, double x, double y, double r) {
+	if (c == NULL) return STATUS_ERR_NULL;
+	if (r < 0) return STATUS_ERR_VALOR;
 
 	ponto_atribui(c->centro, x, y);
 	c->raio = r;
-	return 0;
+	return STATUS_OK;
 }
 
-int circulo_area(Circulo* c, double* area) {
-	if (c == NULL || area == NULL) return -1;
+Status circulo_area(Circulo* c, double* area) {
+	if (c == NULL || area == NULL) return STATUS_ERR_NULL;
 
 	*area = PI * c->raio * c->raio;
-	return 0;
+	return STATUS_OK;
 }
 
-int circulo_pertence(Circulo* c, Ponto* p) {
-	if (c == NULL || p == NULL) return -1;
+Status circulo_pertence(Circulo* c, Ponto* p, int* pertence) {
+	if (c == NULL || p == NULL || pertence == NULL) return STATUS_ERR_NULL;
 
 	double distancia;
 	ponto_distancia(c->centro, p, &distancia);
-	return distancia <= c->raio;
+	*pertence = (distancia <= c->raio) ? 1 : 0;
+	return STATUS_OK;
 }

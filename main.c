@@ -6,44 +6,80 @@
  * de nossa autoria
  */
 #include <stdio.h>
+#include <stdlib.h>
 #include "ponto.h"
 #include "circulo.h"
 #include "matriz.h"
-
-#define STATUS_OK 0 /* Status de sucesso */
-#define STATUS_ERR 1 /* Status de erro */
+#include "status.h"
 
 #define EPSILON 1E-3
 #define EQUAL(x, y) (((x) - (y)) < EPSILON) && (((x) - (y)) > -EPSILON)
 
 /* ==============================
- * Funcoes de teste para as estruturas de dados
+ * Funcoes
+ * ============================== */
+
+static int testar_circulo(void);
+static int testar_matriz(void);
+static int testar_ponto(void);
+
+/* ==============================
+ * MAIN
+ * ============================== */
+
+int main(void) {
+	if (testar_ponto() == EXIT_FAILURE) {
+		printf("Teste do TAD Ponto falhou\n");
+		return EXIT_FAILURE;
+	} else {
+		printf("Teste do TAD Ponto passou\n");
+	}
+
+	if (testar_circulo() == EXIT_FAILURE) {
+		printf("Teste do TAD Circulo falhou\n");
+		return EXIT_FAILURE;
+	} else {
+		printf("Teste do TAD Circulo passou\n");
+	}
+
+	if (testar_matriz() == EXIT_FAILURE) {
+		printf("Teste do TAD Matriz falhou\n");
+		return EXIT_FAILURE;
+	} else {
+		printf("Teste do TAD Matriz passou\n");
+	}
+
+	return EXIT_SUCCESS;
+}
+
+/* ==============================
+ * Implementacoes
  * ============================== */
 
 /**
  * Testa o TAD Ponto
  *
- * Retorna int: 0 para sucesso; senao 1
+ * Retorna int: EXIT_SUCCESS para sucesso; EXIT_FAILURE senao
  */
-int testar_ponto(void) {
+static int testar_ponto(void) {
 	/* Testa criacao de pontos */
 	Ponto* p1 = ponto_cria(3, 4); /* Ponto (3, 4) */
 	Ponto* p2 = ponto_cria(0, 0); /* Ponto (0, 0) */
 
-	if (p1 == NULL) return STATUS_ERR;
-	if (p2 == NULL) return STATUS_ERR;
+	if (p1 == NULL) return EXIT_FAILURE;
+	if (p2 == NULL) return EXIT_FAILURE;
 
 	/* Libera memoria apos teste */
-	if (ponto_libera(p1)) return STATUS_ERR;
-	if (ponto_libera(p2)) return STATUS_ERR;
+	if (ponto_libera(p1) != STATUS_OK) return EXIT_FAILURE;
+	if (ponto_libera(p2) != STATUS_OK) return EXIT_FAILURE;
 
 	/* Testa acesso a coordenadas de um ponto */
 	Ponto* p3 = ponto_cria(3, 4); /* Ponto (3, 4) */
 
 	double x, y; /* Variaveis para armazenar coordenadas de p */
 
-	if (ponto_acessa(p3, &x, &y)) return STATUS_ERR;
-	if (x != 3 || y != 4) return STATUS_ERR;
+	if (ponto_acessa(p3, &x, &y) != STATUS_OK) return EXIT_FAILURE;
+	if (x != 3 || y != 4) return EXIT_FAILURE;
 
 	/* Libera memoria apos teste */
 	ponto_libera(p3);
@@ -53,13 +89,13 @@ int testar_ponto(void) {
 
 	double new_x = 5, new_y = 6; /* Variaveis com novas coordenadas de p */
 
-	if (ponto_atribui(p4, new_x, new_y)) return STATUS_ERR;
+	if (ponto_atribui(p4, new_x, new_y) != STATUS_OK) return EXIT_FAILURE;
 
 	double x2, y2; /* Variaveis para armazenar coordenadas de p apos atribuicao */
 
-	if (ponto_acessa(p4, &x2, &y2)) return STATUS_ERR;
+	if (ponto_acessa(p4, &x2, &y2) != STATUS_OK) return EXIT_FAILURE;
 
-	if (x2 != new_x || y2 != new_y) return STATUS_ERR;
+	if (x2 != new_x || y2 != new_y) return EXIT_FAILURE;
 
 	/* Libera memoria apos testes */
 	ponto_libera(p4);
@@ -69,39 +105,39 @@ int testar_ponto(void) {
 	Ponto* p6 = ponto_cria(0, 0);
 
 	double distance;
-	if (ponto_distancia(p5, p6, &distance)) return STATUS_ERR;
+	if (ponto_distancia(p5, p6, &distance) != STATUS_OK) return EXIT_FAILURE;
 
-	if (!EQUAL(distance, 5)) return STATUS_ERR;
+	if (!EQUAL(distance, 5)) return EXIT_FAILURE;
 
 	/* == FIM DOS TESTES */
-	return STATUS_OK;
+	return EXIT_SUCCESS;
 }
 
 /**
  * Testa o TAD Circulo
  *
- * Retorna int: 0 para sucesso; senao 1
+ * Retorna int: EXIT_SUCCESS para sucesso; EXIT_FAILURE senao
  */
-int testar_circulo(void) {
+static int testar_circulo(void) {
 	/* Testa criacao de circulos */
 	Circulo* c1 = circulo_cria(0, 0, 5); /* Circulo com centro em (0, 0) e raio 5 */
 	Circulo* c2 = circulo_cria(1, 1, 2); /* Circulo com centro em (1, 1) e raio 2 */
 
-	if (c1 == NULL) return STATUS_ERR;
-	if (c2 == NULL) return STATUS_ERR;
+	if (c1 == NULL) return EXIT_FAILURE;
+	if (c2 == NULL) return EXIT_FAILURE;
 
 	/* Libera memoria apos teste */
-	if (circulo_libera(c1)) return STATUS_ERR;
-	if (circulo_libera(c2)) return STATUS_ERR;
+	if (circulo_libera(c1) != STATUS_OK) return EXIT_FAILURE;
+	if (circulo_libera(c2) != STATUS_OK) return EXIT_FAILURE;
 
 	/* Testa acesso a atributos de um circulo */
 	Circulo* c3 = circulo_cria(0, 0, 5); /* Circulo com centro em (0, 0) e raio 5 */
 
 	double x, y, r; /* Variaveis para armazenar atributos de c */
 
-	if (circulo_acessa(c3, &x, &y, &r)) return STATUS_ERR;
+	if (circulo_acessa(c3, &x, &y, &r) != STATUS_OK) return EXIT_FAILURE;
 
-	if (x != 0 || y != 0 || r != 5) return STATUS_ERR;
+	if (x != 0 || y != 0 || r != 5) return EXIT_FAILURE;
 
 	/* Libera memoria apos teste */
 	circulo_libera(c3);
@@ -111,13 +147,13 @@ int testar_circulo(void) {
 
 	double new_x = 1, new_y = 1, new_r = 2; /* Variaveis com novos atributos de c */
 
-	if (circulo_atribui(c4, new_x, new_y, new_r)) return STATUS_ERR;
+	if (circulo_atribui(c4, new_x, new_y, new_r) != STATUS_OK) return EXIT_FAILURE;
 
 	double x2, y2, r2; /* Variaveis para armazenar atributos de c apos atribuicao */
 
-	if (circulo_acessa(c4, &x2, &y2, &r2)) return STATUS_ERR;
+	if (circulo_acessa(c4, &x2, &y2, &r2) != STATUS_OK) return EXIT_FAILURE;
 
-	if (x2 != new_x || y2 != new_y || r2 != new_r) return STATUS_ERR;
+	if (x2 != new_x || y2 != new_y || r2 != new_r) return EXIT_FAILURE;
 
 	/* Libera memoria apos teste */
 	circulo_libera(c4);
@@ -126,9 +162,9 @@ int testar_circulo(void) {
 	Circulo* c5 = circulo_cria(0, 0, 5); /* Circulo com centro em (0, 0) e raio 5 */
 
 	double area;
-	if (circulo_area(c5, &area)) return STATUS_ERR;
+	if (circulo_area(c5, &area) != STATUS_OK) return EXIT_FAILURE;
 
-	if (!EQUAL(area, 78.5398163375)) return STATUS_ERR;
+	if (!EQUAL(area, 78.5398163375)) return EXIT_FAILURE;
 
 	/* Libera memoria apos teste */
 	circulo_libera(c5);
@@ -137,40 +173,41 @@ int testar_circulo(void) {
 	Circulo* c6 = circulo_cria(0, 0, 5); /* Circulo com centro em (0, 0) e raio 5 */
 	Ponto* p1 = ponto_cria(3, 4); /* Ponto (3, 4) */
 
-
-	if (!circulo_pertence(c6, p1)) return STATUS_ERR;
+	int pertence;
+	if (circulo_pertence(c6, p1, &pertence) != STATUS_OK) return EXIT_FAILURE;
+	if (!pertence) return EXIT_FAILURE;
 
 	/* Libera memoria apos teste */
 	circulo_libera(c6);
 	ponto_libera(p1);
 
 	/* == FIM DOS TESTES */
-	return STATUS_OK;
+	return EXIT_SUCCESS;
 }
 
 /**
  * Testa o TAD Matriz
  *
- * Retorna int: 0 para sucesso; senao 1
+ * Retorna int: EXIT_SUCCESS para sucesso; EXIT_FAILURE senao
  */
-int testar_matriz(void) {
+static int testar_matriz(void) {
 	/* Testa criacao de matrizes */
 	Matriz* m1 = matriz_cria(2, 3); /* Matriz de dimensao 2x3 */
 	Matriz* m2 = matriz_cria(4, 5); /* Matriz de dimensao 4x5 */
 
-	if (m1 == NULL) return STATUS_ERR;
-	if (m2 == NULL) return STATUS_ERR;
+	if (m1 == NULL) return EXIT_FAILURE;
+	if (m2 == NULL) return EXIT_FAILURE;
 
 	/* Libera memoria apos teste */
-	if (matriz_libera(m1)) return STATUS_ERR;
-	if (matriz_libera(m2)) return STATUS_ERR;
+	if (matriz_libera(m1) != STATUS_OK) return EXIT_FAILURE;
+	if (matriz_libera(m2) != STATUS_OK) return EXIT_FAILURE;
 
 	/* Testa acesso a elementos de uma matriz */
 	Matriz* m3 = matriz_cria(2, 3); /* Matriz de dimensao 2x3 */
 
 	double element; /* Variavel para armazenar elemento da linha 0 e coluna 0 */
-	if (matriz_acessa(m3, 0, 0, &element)) return STATUS_ERR;
-	if (element != 0) return STATUS_ERR;
+	if (matriz_acessa(m3, 0, 0, &element) != STATUS_OK) return EXIT_FAILURE;
+	if (element != 0) return EXIT_FAILURE;
 
 	/* Libera memoria apos teste */
 	matriz_libera(m3);
@@ -178,44 +215,15 @@ int testar_matriz(void) {
 	/* Testa atribuicao de novo valor a um elemento da matriz */
 	Matriz* m4 = matriz_cria(2, 3); /* Matriz de dimensao 2x3 */
 
-	if (matriz_atribui(m4, 0, 0, 5)) return STATUS_ERR; /* Atribui o valor 5 ao elemento da linha 0 e coluna 0 */
+	if (matriz_atribui(m4, 0, 0, 5) != STATUS_OK) return EXIT_FAILURE; /* Atribui o valor 5 ao elemento da linha 0 e coluna 0 */
 
 	double element2; /* Variavel para armazenar elemento da linha 0 e coluna 0 apos atribuicao */
-	if (matriz_acessa(m4, 0, 0, &element2)) return STATUS_ERR;
-	if (element2 != 5) return STATUS_ERR;
+	if (matriz_acessa(m4, 0, 0, &element2) != STATUS_OK) return EXIT_FAILURE;
+	if (element2 != 5) return EXIT_FAILURE;
 
 	/* Libera memoria apos teste */
 	matriz_libera(m4);
 
 	/* == FIM DOS TESTES */
-	return STATUS_OK;
-}
-
-/* ==============================
- * MAIN
- * ============================== */
-
-int main(void) {
-	if (testar_ponto() == STATUS_ERR) {
-		printf("Teste do TAD Ponto falhou\n");
-		return STATUS_ERR;
-	} else {
-		printf("Teste do TAD Ponto passou\n");
-	}
-
-	if (testar_circulo() == STATUS_ERR) {
-		printf("Teste do TAD Circulo falhou\n");
-		return STATUS_ERR;
-	} else {
-		printf("Teste do TAD Circulo passou\n");
-	}
-
-	if (testar_matriz() == STATUS_ERR) {
-		printf("Teste do TAD Matriz falhou\n");
-		return STATUS_ERR;
-	} else {
-		printf("Teste do TAD Matriz passou\n");
-	}
-
-	return STATUS_OK;
+	return EXIT_SUCCESS;
 }

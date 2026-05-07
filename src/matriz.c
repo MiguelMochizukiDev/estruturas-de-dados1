@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "matriz.h"
+#include "status.h"
 
 /* ==============================
  * Implementacoes
@@ -42,33 +43,36 @@ Matriz* matriz_cria(int m, int n) {
 	return mat;
 }
 
-int matriz_libera(Matriz* mat) {
-	if (mat == NULL) return -1;
+Status matriz_libera(Matriz* mat) {
+	if (mat == NULL) return STATUS_ERR_NULL;
+	
 	free(mat->dados);
 	free(mat);
-	return 0;
+	return STATUS_OK;
 }
 
-int matriz_linhas(Matriz* mat) {
-	if (mat == NULL) return -1;
-	return mat->lin;
+Status matriz_linhas(Matriz* mat, int* linhas) {
+	if (mat == NULL || linhas == NULL) return STATUS_ERR_NULL;
+	*linhas = mat->lin;
+	return STATUS_OK;
 }
 
-int matriz_colunas(Matriz* mat) {
-	if (mat == NULL) return -1;
-	return mat->col;
+Status matriz_colunas(Matriz* mat, int* colunas) {
+	if (mat == NULL || colunas == NULL) return STATUS_ERR_NULL;
+	*colunas = mat->col;
+	return STATUS_OK;
 }
 
-int matriz_acessa(Matriz* mat, int i, int j, double* valor) {
-	if (mat == NULL || valor == NULL) return -1;
-	if (i < 0 || i >= mat->lin || j < 0 || j >= mat->col) return -2;
+Status matriz_acessa(Matriz* mat, int i, int j, double* valor) {
+	if (mat == NULL || valor == NULL) return STATUS_ERR_NULL;
+	if (i < 0 || i >= mat->lin || j < 0 || j >= mat->col) return STATUS_ERR_INDEX;
 	*valor = mat->dados[i * mat->col + j];
-	return 0;
+	return STATUS_OK;
 }
 
-int matriz_atribui(Matriz* mat, int i, int j, double valor) {
-	if (mat == NULL) return -1;
-	if (i < 0 || i >= mat->lin || j < 0 || j >= mat->col) return -2;
+Status matriz_atribui(Matriz* mat, int i, int j, double valor) {
+	if (mat == NULL) return STATUS_ERR_NULL;
+	if (i < 0 || i >= mat->lin || j < 0 || j >= mat->col) return STATUS_ERR_INDEX;
 	mat->dados[i * mat->col + j] = valor;
-	return 0;
+	return STATUS_OK;
 }

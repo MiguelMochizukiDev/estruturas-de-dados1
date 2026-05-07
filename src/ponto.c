@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "ponto.h"
+#include "status.h"
 
 /* ==============================
  * Implementacoes
@@ -35,40 +36,43 @@ Ponto* ponto_cria(double x, double y) {
 	return p;
 }
 
-int ponto_libera(Ponto* p) {
+Status ponto_libera(Ponto* p) {
 	if (p == NULL) {
-		return -1;
+		return STATUS_ERR_NULL;
 	}
+
 	free(p);
-	return 0;
+	return STATUS_OK;
 }
 
-int ponto_acessa(Ponto* p, double* x, double* y) {
+Status ponto_acessa(Ponto* p, double* x, double* y) {
 	if (p == NULL || x == NULL || y == NULL) {
-		return -1;
+		return STATUS_ERR_NULL;
 	}
+
 	*x = p->x;
 	*y = p->y;
-	return 0;
+	return STATUS_OK;
 }
 
-int ponto_atribui(Ponto* p, double x, double y) {
+Status ponto_atribui(Ponto* p, double x, double y) {
 	if (p == NULL) {
-		return -1;
-	}
-	p->x = x;
-	p->y = y;
-	return 0;
-}
-
-int ponto_distancia(Ponto* p1, Ponto* p2, double* distancia) {
-	if (p1 == NULL || p2 == NULL || distancia == NULL) {
-		return -1;
+		return STATUS_ERR_NULL;
 	}
 	
+	p->x = x;
+	p->y = y;
+	return STATUS_OK;
+}
+
+Status ponto_distancia(Ponto* p1, Ponto* p2, double* distancia) {
+	if (p1 == NULL || p2 == NULL || distancia == NULL) {
+		return STATUS_ERR_NULL;
+	}
+
 	double dx = p2->x - p1->x;
 	double dy = p2->y - p1->y;
 	*distancia = sqrt(dx*dx + dy*dy);
-	return 0;
+	return STATUS_OK;
 }
 
