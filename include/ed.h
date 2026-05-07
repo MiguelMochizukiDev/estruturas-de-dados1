@@ -16,5 +16,6 @@
 #include "ponto.h"
 #include "circulo.h"
 #include "matriz.h"
+#include "linked.h"
 
 #endif

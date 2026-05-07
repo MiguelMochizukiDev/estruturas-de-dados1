@@ -39,6 +39,18 @@ static int testar_matriz_inicializacao(void);
 static int testar_matriz_atribuicao(void);
 static int testar_matriz_indices_invalidos(void);
 
+static int testar_linked_list(void);
+static int testar_linked_list_criacao(void);
+static int testar_linked_list_tamanho_vazio(void);
+static int testar_linked_list_insercao_inicio(void);
+static int testar_linked_list_insercao_fim(void);
+static int testar_linked_list_acesso_atribuicao(void);
+static int testar_linked_list_insercao_posicao(void);
+static int testar_linked_list_remocao_inicio(void);
+static int testar_linked_list_remocao_fim(void);
+static int testar_linked_list_remocao_posicao(void);
+static int testar_linked_list_validacoes(void);
+
 /* ==============================
  * MAIN
  * ============================== */
@@ -72,8 +84,16 @@ int main(void) {
 		printf("  -> PASSOU\n\n");
 	}
 
+	printf("TAD LinkedList:\n");
+	if (testar_linked_list() != EXIT_SUCCESS) {
+		printf("  -> FALHOU\n\n");
+		falhas++;
+	} else {
+		printf("  -> PASSOU\n\n");
+	}
+
 	printf("=== Resultado: %d/%d suites passaram ===\n",
-		3 - falhas, 3);
+		4 - falhas, 4);
 
 	return (falhas == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
@@ -510,5 +530,435 @@ static int testar_matriz_indices_invalidos(void) {
 
 	matriz_libera(m);
 	printf("  [OK] Validacao de indices invalidos\n");
+	return EXIT_SUCCESS;
+}
+
+/* ==============================
+ * Testes do TAD LinkedList
+ * ============================== */
+
+static int testar_linked_list(void) {
+	if (testar_linked_list_criacao() != EXIT_SUCCESS) return EXIT_FAILURE;
+	if (testar_linked_list_tamanho_vazio() != EXIT_SUCCESS) return EXIT_FAILURE;
+	if (testar_linked_list_insercao_inicio() != EXIT_SUCCESS) return EXIT_FAILURE;
+	if (testar_linked_list_insercao_fim() != EXIT_SUCCESS) return EXIT_FAILURE;
+	if (testar_linked_list_acesso_atribuicao() != EXIT_SUCCESS) return EXIT_FAILURE;
+	if (testar_linked_list_insercao_posicao() != EXIT_SUCCESS) return EXIT_FAILURE;
+	if (testar_linked_list_remocao_inicio() != EXIT_SUCCESS) return EXIT_FAILURE;
+	if (testar_linked_list_remocao_fim() != EXIT_SUCCESS) return EXIT_FAILURE;
+	if (testar_linked_list_remocao_posicao() != EXIT_SUCCESS) return EXIT_FAILURE;
+	if (testar_linked_list_validacoes() != EXIT_SUCCESS) return EXIT_FAILURE;
+	return EXIT_SUCCESS;
+}
+
+static int testar_linked_list_criacao(void) {
+	LinkedList *list = linked_list_cria();
+
+	if (list == NULL) {
+		printf("  [FALHA] linked_list_cria() retornou NULL\n");
+		return EXIT_FAILURE;
+	}
+
+	linked_list_libera(list);
+	printf("  [OK] Criacao de lista ligada\n");
+	return EXIT_SUCCESS;
+}
+
+static int testar_linked_list_tamanho_vazio(void) {
+	LinkedList *list = linked_list_cria();
+	int size, is_empty;
+
+	if (list == NULL) {
+		printf("  [FALHA] linked_list_cria() retornou NULL\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_tamanho(list, &size) != STATUS_OK) {
+		linked_list_libera(list);
+		printf("  [FALHA] linked_list_tamanho falhou\n");
+		return EXIT_FAILURE;
+	}
+
+	if (size != 0) {
+		linked_list_libera(list);
+		printf("  [FALHA] Tamanho inicial deveria ser 0\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_vazia(list, &is_empty) != STATUS_OK) {
+		linked_list_libera(list);
+		printf("  [FALHA] linked_list_vazia falhou\n");
+		return EXIT_FAILURE;
+	}
+
+	if (is_empty != 1) {
+		linked_list_libera(list);
+		printf("  [FALHA] Lista deveria estar vazia\n");
+		return EXIT_FAILURE;
+	}
+
+	linked_list_libera(list);
+	printf("  [OK] Tamanho e verificacao de lista vazia\n");
+	return EXIT_SUCCESS;
+}
+
+static int testar_linked_list_insercao_inicio(void) {
+	LinkedList *list = linked_list_cria();
+	int size, value;
+
+	if (list == NULL) {
+		printf("  [FALHA] linked_list_cria() retornou NULL\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_insere_inicio(list, 10) != STATUS_OK) {
+		linked_list_libera(list);
+		printf("  [FALHA] linked_list_insere_inicio(10) falhou\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_tamanho(list, &size) != STATUS_OK || size != 1) {
+		linked_list_libera(list);
+		printf("  [FALHA] Tamanho deveria ser 1 apos insercao\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_acessa(list, 0, &value) != STATUS_OK) {
+		linked_list_libera(list);
+		printf("  [FALHA] linked_list_acessa(0) falhou\n");
+		return EXIT_FAILURE;
+	}
+
+	if (value != 10) {
+		linked_list_libera(list);
+		printf("  [FALHA] Valor na posicao 0 deveria ser 10\n");
+		return EXIT_FAILURE;
+	}
+
+	/* Insere no inicio novamente */
+	if (linked_list_insere_inicio(list, 20) != STATUS_OK) {
+		linked_list_libera(list);
+		printf("  [FALHA] linked_list_insere_inicio(20) falhou\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_acessa(list, 0, &value) != STATUS_OK || value != 20) {
+		linked_list_libera(list);
+		printf("  [FALHA] Valor na posicao 0 deveria ser 20 apos segunda insercao\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_acessa(list, 1, &value) != STATUS_OK || value != 10) {
+		linked_list_libera(list);
+		printf("  [FALHA] Valor na posicao 1 deveria ser 10\n");
+		return EXIT_FAILURE;
+	}
+
+	linked_list_libera(list);
+	printf("  [OK] Insercao no inicio\n");
+	return EXIT_SUCCESS;
+}
+
+static int testar_linked_list_insercao_fim(void) {
+	LinkedList *list = linked_list_cria();
+	int size, value;
+
+	if (list == NULL) {
+		printf("  [FALHA] linked_list_cria() retornou NULL\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_insere_fim(list, 10) != STATUS_OK) {
+		linked_list_libera(list);
+		printf("  [FALHA] linked_list_insere_fim(10) falhou\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_insere_fim(list, 20) != STATUS_OK) {
+		linked_list_libera(list);
+		printf("  [FALHA] linked_list_insere_fim(20) falhou\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_insere_fim(list, 30) != STATUS_OK) {
+		linked_list_libera(list);
+		printf("  [FALHA] linked_list_insere_fim(30) falhou\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_tamanho(list, &size) != STATUS_OK || size != 3) {
+		linked_list_libera(list);
+		printf("  [FALHA] Tamanho deveria ser 3\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_acessa(list, 0, &value) != STATUS_OK || value != 10) {
+		linked_list_libera(list);
+		printf("  [FALHA] Valor na posicao 0 deveria ser 10\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_acessa(list, 2, &value) != STATUS_OK || value != 30) {
+		linked_list_libera(list);
+		printf("  [FALHA] Valor na posicao 2 deveria ser 30\n");
+		return EXIT_FAILURE;
+	}
+
+	linked_list_libera(list);
+	printf("  [OK] Insercao no final\n");
+	return EXIT_SUCCESS;
+}
+
+static int testar_linked_list_acesso_atribuicao(void) {
+	LinkedList *list = linked_list_cria();
+	int value;
+
+	if (list == NULL) {
+		printf("  [FALHA] linked_list_cria() retornou NULL\n");
+		return EXIT_FAILURE;
+	}
+
+	linked_list_insere_fim(list, 10);
+	linked_list_insere_fim(list, 20);
+	linked_list_insere_fim(list, 30);
+
+	if (linked_list_acessa(list, 1, &value) != STATUS_OK) {
+		linked_list_libera(list);
+		printf("  [FALHA] linked_list_acessa falhou\n");
+		return EXIT_FAILURE;
+	}
+
+	if (value != 20) {
+		linked_list_libera(list);
+		printf("  [FALHA] Valor na posicao 1 deveria ser 20\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_atribui(list, 1, 25) != STATUS_OK) {
+		linked_list_libera(list);
+		printf("  [FALHA] linked_list_atribui falhou\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_acessa(list, 1, &value) != STATUS_OK || value != 25) {
+		linked_list_libera(list);
+		printf("  [FALHA] Valor na posicao 1 deveria ser 25 apos atribuicao\n");
+		return EXIT_FAILURE;
+	}
+
+	linked_list_libera(list);
+	printf("  [OK] Acesso e atribuicao de elementos\n");
+	return EXIT_SUCCESS;
+}
+
+static int testar_linked_list_insercao_posicao(void) {
+	LinkedList *list = linked_list_cria();
+	int value, size;
+
+	if (list == NULL) {
+		printf("  [FALHA] linked_list_cria() retornou NULL\n");
+		return EXIT_FAILURE;
+	}
+
+	linked_list_insere_fim(list, 10);
+	linked_list_insere_fim(list, 30);
+
+	if (linked_list_insere(list, 1, 20) != STATUS_OK) {
+		linked_list_libera(list);
+		printf("  [FALHA] linked_list_insere(1, 20) falhou\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_tamanho(list, &size) != STATUS_OK || size != 3) {
+		linked_list_libera(list);
+		printf("  [FALHA] Tamanho deveria ser 3\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_acessa(list, 0, &value) != STATUS_OK || value != 10) {
+		linked_list_libera(list);
+		printf("  [FALHA] Valor na posicao 0 deveria ser 10\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_acessa(list, 1, &value) != STATUS_OK || value != 20) {
+		linked_list_libera(list);
+		printf("  [FALHA] Valor na posicao 1 deveria ser 20\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_acessa(list, 2, &value) != STATUS_OK || value != 30) {
+		linked_list_libera(list);
+		printf("  [FALHA] Valor na posicao 2 deveria ser 30\n");
+		return EXIT_FAILURE;
+	}
+
+	linked_list_libera(list);
+	printf("  [OK] Insercao em posicao especifica\n");
+	return EXIT_SUCCESS;
+}
+
+static int testar_linked_list_remocao_inicio(void) {
+	LinkedList *list = linked_list_cria();
+	int value, size;
+
+	if (list == NULL) {
+		printf("  [FALHA] linked_list_cria() retornou NULL\n");
+		return EXIT_FAILURE;
+	}
+
+	linked_list_insere_fim(list, 10);
+	linked_list_insere_fim(list, 20);
+	linked_list_insere_fim(list, 30);
+
+	if (linked_list_remove_inicio(list, &value) != STATUS_OK) {
+		linked_list_libera(list);
+		printf("  [FALHA] linked_list_remove_inicio falhou\n");
+		return EXIT_FAILURE;
+	}
+
+	if (value != 10) {
+		linked_list_libera(list);
+		printf("  [FALHA] Valor removido deveria ser 10\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_tamanho(list, &size) != STATUS_OK || size != 2) {
+		linked_list_libera(list);
+		printf("  [FALHA] Tamanho deveria ser 2 apos remocao\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_acessa(list, 0, &value) != STATUS_OK || value != 20) {
+		linked_list_libera(list);
+		printf("  [FALHA] Novo primeiro elemento deveria ser 20\n");
+		return EXIT_FAILURE;
+	}
+
+	linked_list_libera(list);
+	printf("  [OK] Remocao do inicio\n");
+	return EXIT_SUCCESS;
+}
+
+static int testar_linked_list_remocao_fim(void) {
+	LinkedList *list = linked_list_cria();
+	int value, size;
+
+	if (list == NULL) {
+		printf("  [FALHA] linked_list_cria() retornou NULL\n");
+		return EXIT_FAILURE;
+	}
+
+	linked_list_insere_fim(list, 10);
+	linked_list_insere_fim(list, 20);
+	linked_list_insere_fim(list, 30);
+
+	if (linked_list_remove_fim(list, &value) != STATUS_OK) {
+		linked_list_libera(list);
+		printf("  [FALHA] linked_list_remove_fim falhou\n");
+		return EXIT_FAILURE;
+	}
+
+	if (value != 30) {
+		linked_list_libera(list);
+		printf("  [FALHA] Valor removido deveria ser 30\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_tamanho(list, &size) != STATUS_OK || size != 2) {
+		linked_list_libera(list);
+		printf("  [FALHA] Tamanho deveria ser 2 apos remocao\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_acessa(list, 1, &value) != STATUS_OK || value != 20) {
+		linked_list_libera(list);
+		printf("  [FALHA] Ultimo elemento deveria ser 20\n");
+		return EXIT_FAILURE;
+	}
+
+	linked_list_libera(list);
+	printf("  [OK] Remocao do final\n");
+	return EXIT_SUCCESS;
+}
+
+static int testar_linked_list_remocao_posicao(void) {
+	LinkedList *list = linked_list_cria();
+	int value, size;
+
+	if (list == NULL) {
+		printf("  [FALHA] linked_list_cria() retornou NULL\n");
+		return EXIT_FAILURE;
+	}
+
+	linked_list_insere_fim(list, 10);
+	linked_list_insere_fim(list, 20);
+	linked_list_insere_fim(list, 30);
+
+	if (linked_list_remove(list, 1) != STATUS_OK) {
+		linked_list_libera(list);
+		printf("  [FALHA] linked_list_remove(1) falhou\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_tamanho(list, &size) != STATUS_OK || size != 2) {
+		linked_list_libera(list);
+		printf("  [FALHA] Tamanho deveria ser 2 apos remocao\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_acessa(list, 0, &value) != STATUS_OK || value != 10) {
+		linked_list_libera(list);
+		printf("  [FALHA] Valor na posicao 0 deveria ser 10\n");
+		return EXIT_FAILURE;
+	}
+
+	if (linked_list_acessa(list, 1, &value) != STATUS_OK || value != 30) {
+		linked_list_libera(list);
+		printf("  [FALHA] Valor na posicao 1 deveria ser 30\n");
+		return EXIT_FAILURE;
+	}
+
+	linked_list_libera(list);
+	printf("  [OK] Remocao em posicao especifica\n");
+	return EXIT_SUCCESS;
+}
+
+static int testar_linked_list_validacoes(void) {
+	LinkedList *list = linked_list_cria();
+	int value;
+	Status st;
+
+	if (list == NULL) {
+		printf("  [FALHA] linked_list_cria() retornou NULL\n");
+		return EXIT_FAILURE;
+	}
+
+	/* Testa acesso em lista vazia */
+	st = linked_list_acessa(list, 0, &value);
+	if (st != STATUS_ERR_INDEX) {
+		linked_list_libera(list);
+		printf("  [FALHA] Acesso em indice invalido deveria retornar STATUS_ERR_INDEX\n");
+		return EXIT_FAILURE;
+	}
+
+	/* Testa remocao em lista vazia */
+	st = linked_list_remove_inicio(list, &value);
+	if (st != STATUS_ERR_INDEX) {
+		linked_list_libera(list);
+		printf("  [FALHA] Remocao em lista vazia deveria retornar STATUS_ERR_INDEX\n");
+		return EXIT_FAILURE;
+	}
+
+	/* Testa ponteiro NULL */
+	st = linked_list_tamanho(NULL, &value);
+	if (st != STATUS_ERR_NULL) {
+		linked_list_libera(list);
+		printf("  [FALHA] Operacao com ponteiro NULL deveria retornar STATUS_ERR_NULL\n");
+		return EXIT_FAILURE;
+	}
+
+	linked_list_libera(list);
+	printf("  [OK] Validacoes de erros\n");
 	return EXIT_SUCCESS;
 }
