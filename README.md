@@ -10,7 +10,7 @@ estruturas-de-dados1
 │   └── 2026-05/
 │       └── 2026-05-04/
 │           └── exercicios/
-├── artifacts/          # Arquivos gerados durante execução (ignorado pelo Git)
+├── artifacts/          # Gerados durante execução (ignorado pelo Git)
 ├── bin/                # Executáveis compilados
 ├── build/              # Arquivos objeto (.o) e dependências (.d)
 ├── include/            # Headers (.h)
@@ -19,6 +19,30 @@ estruturas-de-dados1
 ├── README.md
 └── main.c
 ```
+
+## Biblioteca de Estruturas de Dados (ED)
+
+Como projeto para a disciplina, implementamos aqui uma biblioteca reutilizável de Tipos Abstratos de Dados (TADs) em C. A biblioteca está em expansão.
+
+### Códigos de Status
+
+Todas as operações admitidas pelos TADs retornam um `Status`:
+- `STATUS_OK` - Operação bem-sucedida
+- `STATUS_ERR_NULL` - Argumento nulo
+- `STATUS_ERR_INDEX` - Índice fora dos limites
+
+### Testes Automatizados
+
+Execute os testes com:
+```bash
+make run file=main
+```
+
+Os testes cobrem:
+- Criação e liberação de estruturas
+- Operações de acesso e modificação
+- Inserção e remoção de elementos
+- Validação de casos de erro
 
 ## Compilando
 
@@ -36,7 +60,7 @@ make clean
 
 Remove `build/`, `bin/` e `artifacts/`.
 
-## Executando com captura de arquivos
+## Executando
 
 O comando `make run` executa um programa e organiza automaticamente arquivos criados em `artifacts/` com a mesma estrutura de diretórios:
 
