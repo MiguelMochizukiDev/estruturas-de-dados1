@@ -17,5 +17,6 @@
 #include "circulo.h"
 #include "matriz.h"
 #include "linked.h"
+#include "vectorlist.h"
 
 #endif

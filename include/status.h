@@ -22,6 +22,7 @@ typedef enum status_t {
     STATUS_ERR_ESTADO,		/* Estado invalido */
     STATUS_ERR_VALOR,		/* Valor invalido */
     STATUS_ERR_INDEX,		/* Indice invalido */
+    STATUS_ERR_FULL,		/* Estrutura cheia */
 } Status;
 
 #endif
