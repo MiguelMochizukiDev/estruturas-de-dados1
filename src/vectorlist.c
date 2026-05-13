@@ -12,16 +12,18 @@
  * ============================== */
 
 /**
- * Estrutura para lista de vetores
+ * Estrutura para lista de vetores circular
  *
  * Atributos:
  * int* v: ponteiro para vetor alocado dinamicamente
- * int ctr: controle para quantidade atual de elementos
+ * int ctri: indice do primeiro elemento (inicio)
+ * int ctrf: indice do ultimo elemento (fim)
  * int capacity: capacidade maxima da lista
  */
 struct vectorlist_t {
 	int* v;
-	int ctr;
+	int ctri;
+	int ctrf;
 	int capacity;
 };
 
@@ -35,7 +37,9 @@ VectorList* vectorlist_cria(int capacity) {
 		return NULL;
 	}
 
-	list->ctr = -1;
+	/* Lista vazia: ctri == -1 e ctrf == -1 */
+	list->ctri = -1;
+	list->ctrf = -1;
 	list->capacity = capacity;
 
 	return list;
@@ -56,7 +60,19 @@ Status vectorlist_size(VectorList* list, int* tamanho) {
 		return STATUS_ERR_NULL;
 	}
 
-	*tamanho = list->ctr + 1;
+	/* Lista vazia */
+	if (list->ctri == -1 && list->ctrf == -1) {
+		*tamanho = 0;
+	}
+	/* Lista nao vazia */
+	else if (list->ctri <= list->ctrf) {
+		*tamanho = list->ctrf - list->ctri + 1;
+	}
+	/* Caso circular: ctri > ctrf */
+	else {
+		*tamanho = (list->capacity - list->ctri) + (list->ctrf + 1);
+	}
+
 	return STATUS_OK;
 }
 
@@ -65,12 +81,8 @@ Status vectorlist_is_empty(VectorList* list, int* is_empty) {
 		return STATUS_ERR_NULL;
 	}
 
-	int tamanho;
-	if (vectorlist_size(list, &tamanho) != STATUS_OK) {
-		return STATUS_ERR_NULL;
-	}
-
-	*is_empty = (tamanho == 0) ? 1 : 0;
+	/* Lista vazia quando ctri == -1 e ctrf == -1 */
+	*is_empty = (list->ctri == -1 && list->ctrf == -1) ? 1 : 0;
 	return STATUS_OK;
 }
 
@@ -79,12 +91,13 @@ Status vectorlist_is_full(VectorList* list, int* is_full) {
 		return STATUS_ERR_NULL;
 	}
 
-	int tamanho;
-	if (vectorlist_size(list, &tamanho) != STATUS_OK) {
-		return STATUS_ERR_NULL;
+	/* Lista cheia quando (ctrf + 1) % capacity == ctri */
+	if (list->ctri != -1 && list->ctrf != -1) {
+		*is_full = ((list->ctrf + 1) % list->capacity == list->ctri) ? 1 : 0;
+	} else {
+		*is_full = 0;
 	}
 
-	*is_full = (tamanho >= list->capacity) ? 1 : 0;
 	return STATUS_OK;
 }
 
@@ -100,7 +113,22 @@ Status vectorlist_acessa(VectorList* list, int index, int* value) {
 		return STATUS_ERR_INDEX;
 	}
 
-	*value = list->v[index];
+	/* Calcula o indice real no array circular */
+	int real_index;
+	if (list->ctri <= list->ctrf) {
+		/* Caso linear */
+		real_index = list->ctri + index;
+	} else {
+		/* Caso circular */
+		int elementos_ate_fim = list->capacity - list->ctri;
+		if (index < elementos_ate_fim) {
+			real_index = list->ctri + index;
+		} else {
+			real_index = index - elementos_ate_fim;
+		}
+	}
+
+	*value = list->v[real_index];
 	return STATUS_OK;
 }
 
@@ -116,7 +144,46 @@ Status vectorlist_insere_fim(VectorList* list, int value) {
 		return STATUS_ERR_FULL;
 	}
 
-	list->ctr++;
-	list->v[list->ctr] = value;
+	/* Lista vazia */
+	if (list->ctri == -1 && list->ctrf == -1) {
+		list->ctri = 0;
+		list->ctrf = 0;
+		list->v[0] = value;
+	}
+	/* Lista nao vazia */
+	else {
+		/* Avanca ctrf circularmente */
+		list->v[(list->ctrf + 1) % list->capacity] = value;
+		list->ctrf = (list->ctrf + 1) % list->capacity;
+	}
+
+	return STATUS_OK;
+}
+
+Status vectorlist_insere_inicio(VectorList* list, int value) {
+	if (list == NULL) {
+		return STATUS_ERR_NULL;
+	}
+
+	int is_full;
+	if (vectorlist_is_full(list, &is_full) != STATUS_OK) {
+		return STATUS_ERR_NULL;
+	} else if (is_full) {
+		return STATUS_ERR_FULL;
+	}
+
+	/* Lista vazia */
+	if (list->ctri == -1 && list->ctrf == -1) {
+		list->ctri = 0;
+		list->ctrf = 0;
+		list->v[0] = value;
+	}
+	/* Lista nao vazia */
+	else {
+		/* Move ctri circularmente para tras */
+		list->v[(list->ctri - 1 + list->capacity) % list->capacity] = value;
+		list->ctri = (list->ctri - 1 + list->capacity) % list->capacity;
+	}
+
 	return STATUS_OK;
 }

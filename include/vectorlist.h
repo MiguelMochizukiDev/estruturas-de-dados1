@@ -40,7 +40,6 @@ VectorList* vectorlist_cria(int capacity);
  * VectorList* list: ponteiro para uma lista de vetores
  *
  * Retorna Status: STATUS_OK se bem-sucedido; STATUS_ERR_NULL se ponteiro nulo
-
  */
 Status vectorlist_libera(VectorList* list);
 
@@ -98,5 +97,16 @@ Status vectorlist_acessa(VectorList* list, int index, int* value);
  * Retorna Status: STATUS_OK se bem-sucedido; STATUS_ERR_NULL se ponteiro nulo; STATUS_ERR_FULL se lista cheia
  */
 Status vectorlist_insere_fim(VectorList* list, int value);
+
+/**
+ * Insere elemento ao inicio da lista de vetores
+ *
+ * Parametros:
+ * VectorList* list: ponteiro para uma lista de vetores
+ * int value: valor a ser inserido
+ *
+ * Retorna Status: STATUS_OK se bem-sucedido; STATUS_ERR_NULL se ponteiro nulo; STATUS_ERR_FULL se lista cheia
+ */
+Status vectorlist_insere_inicio(VectorList* list, int value);
 
 #endif
