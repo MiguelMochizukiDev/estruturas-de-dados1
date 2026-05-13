@@ -5,7 +5,7 @@
 # Arquivos em src/ são tratados como módulos (sem main) e não geram executáveis.
 
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c11 -O0 -Iinclude
+CFLAGS = -Wall -Wextra -Werror -std=c11 -O0 -Iinclude
 LDFLAGS =
 LDLIBS = -lm
 
