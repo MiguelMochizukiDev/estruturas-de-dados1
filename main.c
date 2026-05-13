@@ -58,6 +58,7 @@ static int testar_vectorlist_criacao(void);
 static int testar_vectorlist_tamanho_vazio(void);
 static int testar_vectorlist_tamanho_cheio(void);
 static int testar_vectorlist_insercao_fim(void);
+static int testar_vectorlist_insercao_comeco(void);
 
 /* ==============================
  * MAIN
@@ -988,6 +989,7 @@ static int testar_vectorlist(void) {
 	if (testar_vectorlist_tamanho_vazio() != EXIT_SUCCESS) return EXIT_FAILURE;
 	if (testar_vectorlist_tamanho_cheio() != EXIT_SUCCESS) return EXIT_FAILURE;
 	if (testar_vectorlist_insercao_fim() != EXIT_SUCCESS) return EXIT_FAILURE;
+	if (testar_vectorlist_insercao_comeco() != EXIT_SUCCESS) return EXIT_FAILURE;
 	return EXIT_SUCCESS;
 }
 
@@ -1105,5 +1107,43 @@ static int testar_vectorlist_insercao_fim(void) {
 
 	vectorlist_libera(list);
 	printf("  [OK] Insercao no final\n");
+	return EXIT_SUCCESS;
+}
+
+static int testar_vectorlist_insercao_comeco(void) {
+	VectorList *list = vectorlist_cria(1);
+	int size, value;
+
+	if (list == NULL) {
+		printf("  [FALHA] vectorlist_cria() retornou NULL\n");
+		return EXIT_FAILURE;
+	}
+
+	if (vectorlist_insere_inicio(list, 10) != STATUS_OK) {
+		vectorlist_libera(list);
+		printf("  [FALHA] vectorlist_insere_inicio(10) falhou\n");
+		return EXIT_FAILURE;
+	}
+
+	if (vectorlist_size(list, &size) != STATUS_OK || size != 1) {
+		vectorlist_libera(list);
+		printf("  [FALHA] Tamanho deveria ser 1 apos insercao\n");
+		return EXIT_FAILURE;
+	}
+
+	if (vectorlist_acessa(list, 0, &value) != STATUS_OK) {
+		vectorlist_libera(list);
+		printf("  [FALHA] vectorlist_acessa(0) falhou\n");
+		return EXIT_FAILURE;
+	}
+
+	if (value != 10) {
+		vectorlist_libera(list);
+		printf("  [FALHA] Valor na posicao 0 deveria ser 10\n");
+		return EXIT_FAILURE;
+	}
+
+	vectorlist_libera(list);
+	printf("  [OK] Insercao no comeco\n");
 	return EXIT_SUCCESS;
 }
