@@ -71,7 +71,7 @@ Status pilha_top(Pilha* pilha, int* valor) {
 	int val;
 	int status = linked_list_acessa(pilha->elementos, 0, &val);
 
-	if (status = STATUS_OK) {
+	if (status == STATUS_OK) {
 		*valor = val;
 	}
 
