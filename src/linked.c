@@ -12,19 +12,21 @@
  * ============================== */
 
 /**
- * Estrutura para no da lista ligada
+ * Estrutura para no da lista duplamente encadeada circular
  *
  * Atributos:
  * int value: valor do elemento
  * node_t* next: ponteiro para o proximo elemento da lista
+ * node_t* prev: ponteiro para o elemento anterior da lista
  */
 struct node_t {
 	int value;
 	struct node_t* next;
+	struct node_t* prev;
 };
 
 /**
- * Estrutura para lista ligada
+ * Estrutura para lista duplamente encadeada circular
  *
  * Atributos:
  * node_t* head: ponteiro para o primeiro elemento da lista
@@ -48,12 +50,17 @@ LinkedList* linked_list_cria(void) {
 Status linked_list_libera(LinkedList* list) {
 	if (list == NULL) return STATUS_ERR_NULL;
 
-	struct node_t* current = list->head;
-	while (current != NULL) {
-		struct node_t* temp = current;
-		current = current->next;
-		free(temp);
+	if (list->size > 0) {
+		struct node_t* current = list->head;
+		struct node_t* next_node;
+
+		do {
+			next_node = current->next;
+			free(current);
+			current = next_node;
+		} while (current != list->head);
 	}
+
 	free(list);
 	return STATUS_OK;
 }
@@ -77,9 +84,18 @@ Status linked_list_acessa(LinkedList* list, int index, int* value) {
 	if (index < 0 || index >= list->size) return STATUS_ERR_INDEX;
 
 	struct node_t* current = list->head;
-	for (int i = 0; i < index; i++) {
-		current = current->next;
+
+	/* Otimizacao: decide se percorre do inicio ou do fim */
+	if (index <= list->size / 2) {
+		for (int i = 0; i < index; i++) {
+			current = current->next;
+		}
+	} else {
+		for (int i = list->size - 1; i > index; i--) {
+			current = current->prev;
+		}
 	}
+
 	*value = current->value;
 	return STATUS_OK;
 }
@@ -89,9 +105,18 @@ Status linked_list_atribui(LinkedList* list, int index, int value) {
 	if (index < 0 || index >= list->size) return STATUS_ERR_INDEX;
 
 	struct node_t* current = list->head;
-	for (int i = 0; i < index; i++) {
-		current = current->next;
+
+	/* Otimizacao: decide se percorre do inicio ou do fim */
+	if (index <= list->size / 2) {
+		for (int i = 0; i < index; i++) {
+			current = current->next;
+		}
+	} else {
+		for (int i = list->size - 1; i > index; i--) {
+			current = current->prev;
+		}
 	}
+
 	current->value = value;
 	return STATUS_OK;
 }
@@ -103,10 +128,23 @@ Status linked_list_insere_inicio(LinkedList* list, int value) {
 	if (new_node == NULL) return STATUS_ERR_MEMORIA;
 
 	new_node->value = value;
-	new_node->next = list->head;
-	list->head = new_node;
-	list->size++;
 
+	if (list->size == 0) {
+		/* Lista vazia: novo no aponta para si mesmo */
+		new_node->next = new_node;
+		new_node->prev = new_node;
+		list->head = new_node;
+	} else {
+		struct node_t* last = list->head->prev;
+
+		new_node->next = list->head;
+		new_node->prev = last;
+		list->head->prev = new_node;
+		last->next = new_node;
+		list->head = new_node;
+	}
+
+	list->size++;
 	return STATUS_OK;
 }
 
@@ -117,19 +155,22 @@ Status linked_list_insere_fim(LinkedList* list, int value) {
 	if (new_node == NULL) return STATUS_ERR_MEMORIA;
 
 	new_node->value = value;
-	new_node->next = NULL;
 
-	if (list->head == NULL) {
+	if (list->size == 0) {
+		/* Lista vazia: novo no aponta para si mesmo */
+		new_node->next = new_node;
+		new_node->prev = new_node;
 		list->head = new_node;
 	} else {
-		struct node_t* current = list->head;
-		while (current->next != NULL) {
-			current = current->next;
-		}
-		current->next = new_node;
-		}
-	list->size++;
+		struct node_t* last = list->head->prev;
 
+		new_node->next = list->head;
+		new_node->prev = last;
+		list->head->prev = new_node;
+		last->next = new_node;
+	}
+
+	list->size++;
 	return STATUS_OK;
 }
 
@@ -148,54 +189,86 @@ Status linked_list_insere(LinkedList* list, int index, int value) {
 		new_node->value = value;
 
 		struct node_t* current = list->head;
-		for (int i = 0; i < index - 1; i++) {
-			current = current->next;
-		}
-		new_node->next = current->next;
-		current->next = new_node;
-		list->size++;
 
+		/* Navega ate a posicao desejada */
+		if (index <= list->size / 2) {
+			for (int i = 0; i < index; i++) {
+				current = current->next;
+			}
+		} else {
+			for (int i = list->size - 1; i >= index; i--) {
+				current = current->prev;
+			}
+		}
+
+		struct node_t* prev_node = current->prev;
+
+		new_node->next = current;
+		new_node->prev = prev_node;
+		prev_node->next = new_node;
+		current->prev = new_node;
+
+		list->size++;
 		return STATUS_OK;
 	}
 }
 
 Status linked_list_remove_inicio(LinkedList* list, int* value) {
-	if (list == NULL || value == NULL) return STATUS_ERR_NULL;
+	if (list == NULL) return STATUS_ERR_NULL;
 	if (list->size == 0) return STATUS_ERR_INDEX;
 
 	struct node_t* temp = list->head;
-	*value = temp->value;
-	list->head = temp->next;
+
+	if (value != NULL) {
+		*value = temp->value;
+	}
+
+	if (list->size == 1) {
+		/* Unico elemento da lista */
+		list->head = NULL;
+	} else {
+		struct node_t* last = list->head->prev;
+
+		list->head = temp->next;
+		list->head->prev = last;
+		last->next = list->head;
+	}
+
 	free(temp);
 	list->size--;
-
 	return STATUS_OK;
 }
 
 Status linked_list_remove_fim(LinkedList* list, int* value) {
-	if (list == NULL || value == NULL) return STATUS_ERR_NULL;
+	if (list == NULL) return STATUS_ERR_NULL;
 	if (list->size == 0) return STATUS_ERR_INDEX;
 
 	if (list->size == 1) {
-		*value = list->head->value;
+		if (value != NULL) {
+			*value = list->head->value;
+		}
 		free(list->head);
 		list->head = NULL;
 	} else {
-		struct node_t* current = list->head;
-		while (current->next->next != NULL) {
-			current = current->next;
-		}
-		*value = current->next->value;
-		free(current->next);
-		current->next = NULL;
-	}
-	list->size--;
+		struct node_t* last = list->head->prev;
+		struct node_t* new_last = last->prev;
 
+		if (value != NULL) {
+			*value = last->value;
+		}
+
+		new_last->next = list->head;
+		list->head->prev = new_last;
+		free(last);
+	}
+
+	list->size--;
 	return STATUS_OK;
 }
 
 Status linked_list_remove(LinkedList* list, int index) {
-	if (list == NULL || index < 0 || index >= list->size) return STATUS_ERR_NULL;
+	if (list == NULL) return STATUS_ERR_NULL;
+	if (index < 0 || index >= list->size) return STATUS_ERR_INDEX;
 	if (list->size == 0) return STATUS_ERR_INDEX;
 
 	if (index == 0) {
@@ -204,12 +277,25 @@ Status linked_list_remove(LinkedList* list, int index) {
 		return linked_list_remove_fim(list, NULL);
 	} else {
 		struct node_t* current = list->head;
-		for (int i = 0; i < index - 1; i++) {
-			current = current->next;
+
+		/* Navega ate a posicao desejada */
+		if (index <= list->size / 2) {
+			for (int i = 0; i < index; i++) {
+				current = current->next;
+			}
+		} else {
+			for (int i = list->size - 1; i > index; i--) {
+				current = current->prev;
+			}
 		}
-		struct node_t* temp = current->next;
-		current->next = temp->next;
-		free(temp);
+
+		struct node_t* prev_node = current->prev;
+		struct node_t* next_node = current->next;
+
+		prev_node->next = next_node;
+		next_node->prev = prev_node;
+
+		free(current);
 		list->size--;
 	}
 
