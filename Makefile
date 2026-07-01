@@ -52,11 +52,12 @@ $(BUILD_DIR)/%.d: %.c
 # Inclui dependências
 -include $(DEPS)
 
-# Executa um programa e organiza arquivos criados em artifacts/
+# Executa um programa com suporte a argumentos
 run:
 	@if [ -z "$(file)" ]; then \
-		echo "Usage: make run file=<relative_path_to_executable>"; \
-		echo "Example: make run file=aulas/2026-05/2026-05-04/exercicios/atividade_arquivo01"; \
+		echo "Usage: make run file=<relative_path_to_executable> [args=<arguments>]"; \
+		echo "Example: make run file=aulas/2026-05/2026-05-04/exercicios/atividade_arquivo01 args=arquivo.txt"; \
+		echo "Example: make run file=aulas/2026-06/2026-06-29/exercicios/exercicio_hanoi args=discos.txt"; \
 		exit 1; \
 	fi
 	@EXECUTABLE="$(BIN_DIR)/$(file)"; \
@@ -68,7 +69,11 @@ run:
 	mkdir -p artifacts; \
 	find . -path ./$(BUILD_DIR) -prune -o -path ./$(BIN_DIR) -prune -o -path ./artifacts -prune -o -type f -print 2>/dev/null | sort > /tmp/before.txt; \
 	echo "Running $$EXECUTABLE..."; \
-	./$$EXECUTABLE; \
+	if [ -n "$(args)" ]; then \
+		./$$EXECUTABLE $(args); \
+	else \
+		./$$EXECUTABLE; \
+	fi; \
 	EXIT_CODE=$$?; \
 	find . -path ./$(BUILD_DIR) -prune -o -path ./$(BIN_DIR) -prune -o -path ./artifacts -prune -o -type f -print 2>/dev/null | sort > /tmp/after.txt; \
 	NEW_FILES=$$(diff /tmp/before.txt /tmp/after.txt | grep "^>" | sed 's/^> //'); \
