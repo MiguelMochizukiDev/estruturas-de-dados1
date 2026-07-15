@@ -27,6 +27,7 @@ static void testa_pilha(void);
 static void testa_fila(void);
 static void testa_ponto(void);
 static void testa_lista_vetores(void);
+static void testa_arvore_binaria(void);
 
 /* ==============================
  * MAIN
@@ -48,7 +49,9 @@ static void print_menu(void) {
 		printf("3. Matriz\n");
 		printf("4. Pilha\n");
 		printf("5. Ponto\n");
-		printf("6. Lista de vetores\n");
+		printf("6. Fila\n");
+		printf("7. Lista de vetores\n");
+		printf("8. Arvore Binaria\n");
 		printf("0. Sair\n");
 		printf("Escolha uma opcao: ");
 
@@ -69,13 +72,16 @@ static void print_menu(void) {
 				testa_pilha();
 				break;
 			case 5:
-				testa_fila();
+				testa_ponto();
 				break;
 			case 6:
-				testa_ponto();
+				testa_fila();
 				break;
 			case 7:
 				testa_lista_vetores();
+				break;
+			case 8:
+				testa_arvore_binaria();
 				break;
 			case 0:
 				printf("Encerrando o programa...\n");
@@ -112,4 +118,8 @@ static void testa_ponto(void) {
 
 static void testa_lista_vetores(void) {
 	printf("Testando Lista de Vetores...\n");
+}
+
+static void testa_arvore_binaria(void) {
+	printf("Testando Arvore Binaria...\n");
 }

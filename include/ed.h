@@ -18,5 +18,6 @@
 #include "matriz.h"
 #include "linked.h"
 #include "vectorlist.h"
+#include "arvore_binaria.h"
 
 #endif
